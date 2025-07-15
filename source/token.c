@@ -43,6 +43,6 @@ Span create_span(const char *filename, size_t line, size_t column, size_t colend
 	return (Span) {arena_strdup(main_arena, filename), line, column, colend};
 }
 
-Token create_token(const char *lexme, Span span) {
-	return (Token) {arena_strdup(main_arena, lexme), span};
+Token create_token(TokenKind kind, const char *lexme, Span span) {
+	return (Token) {kind, arena_strdup(main_arena, lexme), span};
 }

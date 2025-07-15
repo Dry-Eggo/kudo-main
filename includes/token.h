@@ -10,6 +10,7 @@ typedef struct {
 } Span;
 
 typedef struct {
+	TokenKind kind;
 	const char* lexme;
 	Span span;
 } Token;
@@ -26,4 +27,4 @@ Token      tl_get(TokenList* tl, size_t n);
 void       tl_free(TokenList* tl);
 
 Span       create_span(const char* filename, size_t line, size_t column, size_t colend);
-Token      create_token(const char* lexme, Span span);
+Token      create_token(TokenKind kind, const char* lexme, Span span);
