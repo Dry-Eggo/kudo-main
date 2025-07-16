@@ -27,3 +27,20 @@ typedef enum {
 	TOKEN_EOS /* End Of Stream */,
 	TOKEN_UNKNOWN
 } TokenKind;
+
+typedef enum {
+    EXPR_STRING,
+    EXPR_INTEGER,
+    EXPR_IDENT,
+    EXPR_COMPOUND_STMT,
+} ExprKind;
+
+typedef enum {
+    STMT_FUNCDECL,
+    STMT_VARDECLAUTO,
+    STMT_EXPR,
+} StmtKind;
+
+typedef enum {
+    TYPE_INT, TYPE_CSTR, TYPE_CHAR, TYPE_STRING, TYPE_BOOL, TYPE_VOID
+} BaseType;

@@ -3,7 +3,7 @@ SRCDIR:= source
 INCDIR:= includes
 SRC:= $(wildcard $(SRCDIR)/*.c)
 OBJ:= $(patsubst $(SRCDIR)/%.c, $(BINDIR)/%.o, $(SRC))
-FLAGS:= -I$(INCDIR)
+FLAGS:= -I$(INCDIR) -Wall
 
 TARGET:= $(BINDIR)/kudoc
 

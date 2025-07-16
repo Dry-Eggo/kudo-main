@@ -1,0 +1,51 @@
+#pragma once
+
+#include <enum.h>
+#include <list_builder.h>
+#include <type_system.h>
+#include <stdlib.h>
+
+typedef struct Expr Expr;
+typedef struct Stmt Stmt;
+NEW_LIST(Expr)
+NEW_LIST(Stmt)
+
+typedef struct CompoundStmt {
+    list_Stmt*  statements;
+} CompoundStmt;
+
+typedef struct VarDeclAuto {
+    const char* identifier;
+    Expr*       value;
+} VarDeclAuto;
+
+typedef struct FuncDecl {
+    const char* name;
+    list_Expr*  params;
+    Expr*       body;
+    Type*       return_type;
+} FuncDecl;
+
+struct Expr {
+    ExprKind kind;
+    union {
+	int             int_expr;
+	const char*     string_expr;
+	struct CompoundStmt* compound_expr;
+    };
+};
+
+struct Stmt {
+    StmtKind kind;
+    union {
+	struct FuncDecl func_decl;
+	struct VarDeclAuto var_decl_auto;
+	struct Expr*       expr_stmt;
+    };
+};
+
+Expr* create_expr_int(int value);
+Expr* create_expr_string(const char* value);
+Expr* create_stmt_compound(list_Stmt* stmts);
+Stmt* create_stmt_vardeclauto(const char* name, Expr* expr);
+Stmt* create_stmt_funcdecl(const char* name, list_Expr* params, Type* ret, Expr* body);

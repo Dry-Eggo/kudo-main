@@ -61,7 +61,6 @@ static void SB_set(StringBuilder *sb, const char *cstr, ...) {
     sb->data = newbuf;
   }
   va_start(args, cstr);
-  int written = vsnprintf(sb->data, sb->cap - sb->len, cstr, args);
   sb->len = needed;
   sb->data[sb->len] = '\0';
   va_end(args);

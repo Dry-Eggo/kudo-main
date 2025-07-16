@@ -1,0 +1,15 @@
+#pragma once
+
+#include <token.h>
+#include <nodes.h>
+#include <nob.h>
+
+typedef struct Parser {
+    size_t cursor;
+    TokenList* tokens;
+    list_Stmt* parsed_program;
+    Nob_String_Builder source;
+} Parser;
+
+Parser* kudo_parser_init(TokenList* tokens, Nob_String_Builder sb);
+void kudo_parser_parse(Parser*);
