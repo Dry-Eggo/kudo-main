@@ -8,8 +8,12 @@ typedef enum {
 } CMD_OPTION;
 
 typedef enum {
+    // keywords
 	TOKEN_FUNC, TOKEN_VAR,
-	TOKEN_IDENTIFIER,
+	TOKEN_INT, TOKEN_STR, TOKEN_CSTR, TOKEN_BOOL,
+
+    // values
+    TOKEN_IDENTIFIER, TOKEN_STRING, TOKEN_CSTRING,
 	TOKEN_INTEGER, TOKEN_FLOAT,
 
 	// punctuations
@@ -29,7 +33,7 @@ typedef enum {
 } TokenKind;
 
 typedef enum {
-    EXPR_STRING,
+    EXPR_STRING, EXPR_CSTRING,
     EXPR_INTEGER,
     EXPR_IDENT,
     EXPR_COMPOUND_STMT,
@@ -38,9 +42,15 @@ typedef enum {
 typedef enum {
     STMT_FUNCDECL,
     STMT_VARDECLAUTO,
+    STMT_VARDECL,
     STMT_EXPR,
 } StmtKind;
 
 typedef enum {
     TYPE_INT, TYPE_CSTR, TYPE_CHAR, TYPE_STRING, TYPE_BOOL, TYPE_VOID
 } BaseType;
+
+typedef enum {
+    ERROR_TYPEMISMATCH,
+    ERROR_INVALIDTYPE,
+} ErrorKind;

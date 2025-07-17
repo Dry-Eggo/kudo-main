@@ -1,8 +1,11 @@
 #include "options.h"
 #include "pipeline.h"
-#include <stdio.h>
+
+
 #define NOB_IMPLEMENTATION
 #define ARENA_IMPLEMENTATION
+#define STB_IMPLEMENTATION
+
 #include "../includes/arena.h"
 #include "../includes/nob.h"
 

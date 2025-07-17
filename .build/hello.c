@@ -1,4 +1,4 @@
+#include "/home/dry/programming/c/kudo/runtime/kudo.h"
 
-int main() {
-int age = 30;
+kudo_int main() {
 }

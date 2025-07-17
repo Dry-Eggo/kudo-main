@@ -67,7 +67,22 @@ void kudo_lexer_lex(Lexer *lexer) {
 			kudo_lexer_advance(lexer);
 			continue;
 		}
-
+        
+        if (kudo_lexer_now(lexer) == 'c' && kudo_lexer_peek(lexer, 1) == '"') {
+            kudo_lexer_advance(lexer);
+            kudo_lexer_advance(lexer);
+            StringBuilder* sb; SB_init(&sb);
+            size_t line = lexer->line;
+            size_t col  = lexer->col;
+            while (kudo_lexer_now(lexer) != '"') {
+                sbapp(sb, "%c", kudo_lexer_now(lexer));
+                kudo_lexer_advance(lexer);
+            }
+            kudo_lexer_advance(lexer);
+            tl_add(lexer->tokens, create_token(TOKEN_CSTRING, arena_strdup(main_arena, sb->data), create_span(lexer->input_path, line, col, lexer->col-1)));
+            continue;
+        }
+        
 		if (isalpha(kudo_lexer_now(lexer)) || kudo_lexer_now(lexer) == '_') {
 			StringBuilder* buffer;
 			SB_init(&buffer);
@@ -82,7 +97,11 @@ void kudo_lexer_lex(Lexer *lexer) {
 				tl_add(lexer->tokens, create_token(TOKEN_FUNC, arena_strdup(main_arena, buffer->data), create_span(lexer->input_path, line, col, lexer->col-1)));
 			} else if (sbeq(buffer, "var")) {
 				tl_add(lexer->tokens, create_token(TOKEN_VAR, arena_strdup(main_arena, buffer->data), create_span(lexer->input_path, line, col, lexer->col-1)));
-			} else {
+			} else if (sbeq(buffer, "int")) {
+				tl_add(lexer->tokens, create_token(TOKEN_INT, arena_strdup(main_arena, buffer->data), create_span(lexer->input_path, line, col, lexer->col-1)));
+			} else if (sbeq(buffer, "cstr")) {
+				tl_add(lexer->tokens, create_token(TOKEN_CSTR, arena_strdup(main_arena, buffer->data), create_span(lexer->input_path, line, col, lexer->col-1)));
+			}else {
 				tl_add(lexer->tokens, create_token(TOKEN_IDENTIFIER, arena_strdup(main_arena, buffer->data), create_span(lexer->input_path, line, col, lexer->col-1)));
 			}
 			SB_free(buffer);

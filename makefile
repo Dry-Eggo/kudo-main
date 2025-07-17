@@ -2,15 +2,20 @@ BINDIR:= out
 SRCDIR:= source
 INCDIR:= includes
 SRC:= $(wildcard $(SRCDIR)/*.c)
+CPPSRC:= $(wildcard $(SRCDIR)/khm/*.cpp)
+CPPOBJ:= $(patsubst $(SRCDIR)/khm/%.cpp, $(BINDIR)/%.o, $(CPPSRC))
 OBJ:= $(patsubst $(SRCDIR)/%.c, $(BINDIR)/%.o, $(SRC))
-FLAGS:= -I$(INCDIR) -Wall
+FLAGS:= -I$(INCDIR) -I./source/khm
 
 TARGET:= $(BINDIR)/kudoc
 
 all: $(TARGET)
 
-$(TARGET): $(OBJ)
-	gcc -o $@ $^ $(FLAGS)
+$(TARGET): $(OBJ) $(CPPOBJ)
+	clang++ -o $@ $^ $(FLAGS)
 
 $(BINDIR)/%.o: $(SRCDIR)/%.c
-	gcc -c -o $@ $< $(FLAGS)
+	clang -c -o $@ $< $(FLAGS)
+
+$(BINDIR)/%.o: $(SRCDIR)/khm/%.cpp
+	clang++ -c -o $@ $< $(FLAGS)

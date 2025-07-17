@@ -1,5 +1,6 @@
 #include <parser.h>
 #include <globals.h>
+#include <stdbool.h>
 
 
 #define neof()          (now(parser).kind != TOKEN_EOS)
@@ -14,7 +15,7 @@ Token look_ahead(Parser* parser, size_t n);
 Expr* parse_expr(Parser* parser);
 Expr* parse_atom(Parser* parser);
 Expr* parse_body(Parser* parser);
-
+Type* parse_type(Parser* parser);
 Stmt* parse_function(Parser* parser);
 
 void expect(Parser* parser, TokenKind k) {
@@ -81,6 +82,8 @@ void kudo_parser_parse(Parser* parser) {
 }
 
 Stmt* parse_function(Parser* parser) {
+    // TODO: Span the whole function
+    Span start = now(parser).span;
     expect(parser, TOKEN_FUNC);
     if (!match(TOKEN_IDENTIFIER)) {
 	error(parser, "Expected identifier");
@@ -93,10 +96,11 @@ Stmt* parse_function(Parser* parser) {
 
     Type* return_type = create_type(TYPE_INT);
     Expr* body = parse_expr(parser);
-    return create_stmt_funcdecl(str_dup(name), NULL, return_type, body);
+    return create_stmt_funcdecl(str_dup(name), NULL, return_type, body, start);
 }
 
 Stmt* parse_vardecl(Parser* parser) {
+    Span start = now(parser).span;
     expect(parser, TOKEN_VAR);
     if (!match(TOKEN_IDENTIFIER)) {
 	error(parser, "Expected identifier");
@@ -105,10 +109,21 @@ Stmt* parse_vardecl(Parser* parser) {
     advance();
     
     expect(parser, TOKEN_COLON);
-    expect(parser, TOKEN_EQ);
+    bool do_parse_type = true;
+    if (match(TOKEN_EQ)) {
+        expect(parser, TOKEN_EQ);
+        do_parse_type = false;
+    }
+
+    if (do_parse_type) {
+        Type* parsed_type = parse_type(parser);
+        expect(parser, TOKEN_EQ);
+        Expr* value = parse_expr(parser);
+        return create_stmt_vardecl(str_dup(name), value, parsed_type, start);
+    }
 
     Expr* value = parse_expr(parser);
-    return create_stmt_vardeclauto(str_dup(name), value);
+    return create_stmt_vardeclauto(str_dup(name), value, start);
 }
 
 Expr* parse_body(Parser* parser) {
@@ -134,17 +149,35 @@ Expr* parse_expr(Parser* parser) {
 Expr* parse_atom(Parser* parser) {
     switch(now(parser).kind)
     {
-	case TOKEN_INTEGER: {
-	    int i = strtol(now(parser).lexme, NULL, 10);
-	    advance();
-	    return create_expr_int(i);
-	} break;
-	case TOKEN_OCURLY: {
-	    Expr* body = parse_body(parser);
-	    return body;
-	} break;
-    default:
-	error(parser, "Unexpected Token");
-	exit(1);
+        case TOKEN_INTEGER: {
+            int i = strtol(now(parser).lexme, NULL, 10);
+            Span span = now(parser).span;
+            advance();
+            return create_expr_int(i, span);
+        } break;
+        case TOKEN_CSTRING: {   
+            Span span = now(parser).span;
+            const char* data = arena_strdup(main_arena, now(parser).lexme);
+            advance();
+            return create_expr_cstring(data, span);
+        }  break;
+        case TOKEN_OCURLY: {
+            Expr* body = parse_body(parser);
+            return body;
+        } break;
+        default:
+            error(parser, "Unexpected Token");
+            exit(1);
     }
+}
+
+Type* parse_type(Parser* parser) {
+   if (match(TOKEN_INT)) {
+        advance();
+        return create_type(TYPE_INT);
+    } else if (match(TOKEN_CSTR)) {
+        advance();
+        return create_type(TYPE_CSTR);
+    }
+    error(parser, "Unknown Type");
 }

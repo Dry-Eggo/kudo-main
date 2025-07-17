@@ -10,17 +10,17 @@
   } list_##T;                                                               \
   static inline int list_##T##_grow(list_##T *);                         \
   static inline int list_##T##_init(list_##T **l) {                      \
-    *l = (list_##T *)malloc(sizeof(list_##T *));                                  \
+    *l = (list_##T *)arena_alloc(main_arena, sizeof(list_##T *));                                  \
     if (!l)                                                                    \
       return -1;                                                               \
-    (*l)->data = (T **)malloc(64 * sizeof(T *));                               \
+    (*l)->data = (T **)arena_alloc(main_arena, 64 * sizeof(T *));                               \
     (*l)->cap = 64;                                                            \
     (*l)->count = 0;                                                           \
     return 0;                                                                  \
   }                                                                            \
   static inline int list_##T##_grow(list_##T *l) {                       \
     size_t ns = l->cap * 2;                                                    \
-    l->data = (T **)realloc(l->data, sizeof(T *) * ns);                                      \
+    l->data = (T **)arena_realloc(main_arena, l->data, l->cap, sizeof(T *) * ns);                                      \
     l->cap = ns;                                                               \
     return 0;                                                                  \
   }                                                                            \

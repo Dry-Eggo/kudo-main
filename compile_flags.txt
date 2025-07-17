@@ -1,2 +1,3 @@
+-I./includes 
+-I./source/khm
 -xc
--I./includes
