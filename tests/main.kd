@@ -1,6 +1,5 @@
 
 func main() {
      var agent : int = 20;
-     var agent := 40;
-     printf(c"Hello World\n");
+     printf(c"agent: %d\n", agent);
 }

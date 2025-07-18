@@ -2,5 +2,5 @@
 
 int main () {
 int agent = 20;
-printf("Hello World\n");
+printf("agent: %d\n",agent);
 }
