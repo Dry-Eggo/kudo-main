@@ -47,6 +47,7 @@ namespace Kudo::CodeGen {
 	bool type_match(shr(Type) t1, shr(Type) t2);
 
 	// errors
+	void underline(std::string line, Span s);
 	void format_typemismatch(Semantic::TypeMisMatch err);
 	void format_redefinition(Semantic::Redefinition err);
 	void add_error(SemanticError e);

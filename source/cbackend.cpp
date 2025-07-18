@@ -165,11 +165,15 @@ void CBackend::format_typemismatch(TypeMisMatch err) {
     printf(" %1d |%s\n", err.span.line, line.c_str());
     printf(" %1c |", ' ');
     
+    underline(line, err.span);
+}
+
+void CBackend::underline(std::string line, Span s) {
     int fc = first_char(line);
     printf("%s", std::string(fc, ' ').c_str());
     for (int i = fc; i < line.size(); i++) {
-	if (i >= err.span.column) {
-	    while(i <= err.span.offset) {
+	if (i >= s.column) {
+	    while(i <= s.offset) {
 		printf("^");
 		i++;
 	    }
@@ -186,18 +190,7 @@ void CBackend::format_redefinition(Redefinition err) {
     printf(" %1d |%s\n", err.second.line, second_line.c_str());
     printf(" %1c |", ' ');
 
-    int fc = first_char(second_line);
-    printf("%s", std::string(fc, ' ').c_str());
-    for (int i = fc; i < second_line.size(); i++) {
-	if (i >= err.second.column) {
-	    while(i <= err.second.offset) {
-		printf("^");
-		i++;
-	    }
-	}
-    }
-    printf("\n");
-    
+    underline(second_line, err.second);
     
     auto first_line = source.at(err.first.line-1);
     printf("-----> %s:%d:%d-%d: First Defined Here\n",
@@ -206,17 +199,7 @@ void CBackend::format_redefinition(Redefinition err) {
     printf(" %1d |%s\n", err.first.line, first_line.c_str());
     printf(" %1c |", ' ');
 
-    fc = first_char(first_line);
-    printf("%s", std::string(fc, ' ').c_str());
-    for (int i = fc; i < first_line.size(); i++) {
-	if (i >= err.first.column) {
-	    while(i <= err.first.offset) {
-		printf("^");
-		i++;
-	    }
-	}
-    }
-    printf("\n");
+    underline(first_line, err.first);
 }
 
 void CBackend::flush() {
