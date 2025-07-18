@@ -1,0 +1,1521 @@
+
+source/cbackend.cpp,370
+struct CResult 10,171
+    std::string code;CResult::code12,209
+    std::string preamble;CResult::preamble13,231
+    CResult(CResult::CResult14,257
+void CBackend::parse(19,364
+CResult CBackend::gen_function(29,596
+CResult CBackend::gen_stmt(39,908
+CResult CBackend::gen_expr(61,1546
+std::string CBackend::type_tostr(82,2171
+bool CBackend::type_match(92,2430
+
+source/lexer.cpp,403
+namespace Kudo 10,153
+    namespace Language Kudo::Language11,170
+	Lexer::Lexer(Kudo::Language::Lexer::Lexer12,195
+	char Lexer::now(Kudo::Language::Lexer::now24,536
+	char Lexer::peek(Kudo::Language::Lexer::peek30,642
+	char Lexer::before(Kudo::Language::Lexer::before36,757
+	char Lexer::advance(Kudo::Language::Lexer::advance42,861
+	Tokens Lexer::parse(Kudo::Language::Lexer::parse54,1021
+
+source/main.cpp,124
+using Kudo::Language::Lexer;7,90
+using Kudo::Language::Parser;8,119
+using Kudo::CodeGen::CBackend;9,149
+int main(11,181
+
+source/parser.cpp,757
+using Kudo::Error::Syntax::Diagnostic;8,131
+using Kudo::Language::ExprPtr;9,170
+using Kudo::Language::Parser;10,201
+using Kudo::Language::StmtPtr;11,231
+using Kudo::Language::Token;12,262
+Token Parser::peek(14,292
+Token Parser::now(21,420
+Token Parser::before(28,539
+bool Parser::match(35,653
+void Parser::expect(37,722
+void Parser::advance(49,944
+StmtPtr Parser::parse_stmt(51,982
+shr(85,1928
+void Parser::parse(106,2409
+StmtPtr Parser::parse_function(123,2730
+ExprPtr Parser::parse_expr(147,3338
+ExprPtr Parser::parse_logical_or(149,3399
+ExprPtr Parser::parse_logical_and(154,3491
+ExprPtr Parser::parse_equality(159,3581
+ExprPtr Parser::parse_additive(164,3668
+ExprPtr Parser::parse_term(169,3751
+ExprPtr Parser::parse_atom(174,3830
+
+includes/parser.hpp,499
+using Kudo::CodeGen::Types::Type;10,130
+using Kudo::CodeGen::Types::BaseType;11,164
+namespace Kudo 13,203
+namespace Language Kudo::Language14,220
+struct Parser Kudo::Language::Parser15,241
+  Tokens tokens;Kudo::Language::Parser::tokens17,275
+  std::string source;Kudo::Language::Parser::source18,292
+  Statements program;Kudo::Language::Parser::program19,314
+  Error::Syntax::SyntaxErrorEngine error;Kudo::Language::Parser::error20,336
+  Parser(Kudo::Language::Parser::Parser22,379
+
+includes/syntax_error.hpp,800
+namespace Kudo::Error::Syntax 8,110
+using Kudo::Language::Span;Kudo::Error::Syntax::Kudo::Language::Span9,142
+struct Diagnostic Kudo::Error::Syntax::Diagnostic10,170
+  Span span;Kudo::Error::Syntax::Diagnostic::span11,190
+  std::string message;Kudo::Error::Syntax::Diagnostic::message12,203
+  std::string hint;Kudo::Error::Syntax::Diagnostic::hint13,226
+  Diagnostic(Kudo::Error::Syntax::Diagnostic::Diagnostic14,246
+struct SyntaxErrorEngine 18,351
+  std::vector<std::string> source;SyntaxErrorEngine::source19,378
+  std::vector<Diagnostic> errors;SyntaxErrorEngine::errors20,413
+  SyntaxErrorEngine(SyntaxErrorEngine::SyntaxErrorEngine22,448
+  void add(SyntaxErrorEngine::add30,617
+  void report(SyntaxErrorEngine::report32,668
+  void flush(SyntaxErrorEngine::flush56,1332
+
+includes/nodes.hpp,1503
+using Kudo::Language::Span;12,191
+namespace Kudo 14,220
+namespace Language Kudo::Language15,237
+struct Param Kudo::Language::Param19,285
+  std::string name;Kudo::Language::Param::name20,300
+  Param(Kudo::Language::Param::Param21,320
+using Params 24,360
+using Statements 25,395
+struct Body 27,437
+  Statements stmts;Body::stmts28,451
+  Body(Body::Body29,471
+struct FunctionDef 32,514
+  std::string name;FunctionDef::name33,535
+  Params params;FunctionDef::params34,555
+  StmtPtr body;FunctionDef::body35,572
+  FunctionDef(FunctionDef::FunctionDef36,588
+struct VariableDecl 41,744
+  bool is_const VariableDecl::is_const42,766
+  std::string name;VariableDecl::name43,790
+  ExprPtr expr;VariableDecl::expr44,810
+  VariableDecl(VariableDecl::VariableDecl47,850
+  VariableDecl(VariableDecl::VariableDecl50,940
+struct Integer 54,1057
+  int value;Integer::value55,1074
+  Integer(Integer::Integer56,1087
+struct StringN 59,1122
+  std::string value;StringN::value60,1139
+  StringN(StringN::StringN61,1160
+struct CStringN 64,1207
+  std::string value;CStringN::value65,1225
+  CStringN(CStringN::CStringN66,1246
+struct ExprStmt 69,1294
+  ExprPtr expr;ExprStmt::expr70,1312
+  ExprStmt(ExprStmt::ExprStmt71,1328
+struct Expr 74,1378
+    ExprVariant data;Expr::data75,1392
+    Span span;Expr::span76,1414
+    Expr(Expr::Expr77,1429
+struct Stmt 80,1498
+    StmtVariant data;Stmt::data81,1512
+    Span span;Stmt::span82,1534
+    Stmt(Stmt::Stmt83,1549
+
+includes/cbackend.hpp,359
+namespace Kudo::CodeGen 9,118
+    struct CBackend Kudo::CodeGen::CBackend10,144
+	Language::Statements program;Kudo::CodeGen::CBackend::program11,166
+	Types::TypeMap       types;Kudo::CodeGen::CBackend::types12,197
+	std::vector<Error::Semantic::Error>   errors;Kudo::CodeGen::CBackend::errors13,226
+	CBackend(Kudo::CodeGen::CBackend::CBackend15,275
+
+includes/CLI11.hpp,75129
+#define CLI11_VERSION_MAJOR 67,2445
+#define CLI11_VERSION_MINOR 68,2475
+#define CLI11_VERSION_PATCH 69,2505
+#define CLI11_VERSION 70,2535
+#define CLI11_CPP1478,2747
+#define CLI11_CPP1780,2794
+#define CLI11_CPP2082,2840
+#define CLI11_CPP2384,2886
+#define CLI11_CPP2686,2932
+#define CLI11_CPP1496,3254
+#define CLI11_CPP1798,3319
+#define CLI11_CPP20100,3384
+#define CLI11_CPP23102,3449
+#define CLI11_DEPRECATED(110,3530
+#define CLI11_DEPRECATED(112,3610
+#define CLI11_DEPRECATED(114,3680
+#define CLI11_NODISCARD120,4043
+#define CLI11_NODISCARD 122,4073
+#define CLI11_USE_STATIC_RTTI 128,4226
+#define CLI11_USE_STATIC_RTTI 131,4325
+#define CLI11_USE_STATIC_RTTI 133,4363
+#define CLI11_USE_STATIC_RTTI 136,4444
+#define CLI11_USE_STATIC_RTTI 138,4482
+#define CLI11_HAS_FILESYSTEM 147,4820
+#define CLI11_HAS_FILESYSTEM 150,4927
+#define CLI11_HAS_FILESYSTEM 155,5107
+#define CLI11_HAS_FILESYSTEM 158,5228
+#define CLI11_HAS_FILESYSTEM 160,5265
+#define CLI11_HAS_FILESYSTEM 163,5309
+#define CLI11_HAS_CODECVT 172,5546
+#define CLI11_HAS_CODECVT 174,5580
+#define CLI11_HAS_CODECVT 183,5729
+#define CLI11_DIAGNOSTIC_PUSH 189,5839
+#define CLI11_DIAGNOSTIC_POP 190,5900
+#define CLI11_DIAGNOSTIC_IGNORE_DEPRECATED 192,5960
+#define CLI11_DIAGNOSTIC_PUSH 195,6092
+#define CLI11_DIAGNOSTIC_POP 196,6146
+#define CLI11_DIAGNOSTIC_IGNORE_DEPRECATED 198,6199
+#define CLI11_DIAGNOSTIC_PUSH201,6283
+#define CLI11_DIAGNOSTIC_POP202,6313
+#define CLI11_DIAGNOSTIC_IGNORE_DEPRECATED204,6343
+#define CLI11_INLINE210,6437
+#define CLI11_INLINE 212,6464
+#define _AMD64_242,7145
+#define _X86_244,7262
+#define _ARM_246,7338
+#define _ARM64_248,7400
+#define _ARM64EC_250,7442
+#define NOMINMAX257,7578
+#undef NOMINMAX259,7615
+namespace CLI 272,7767
+namespace detail CLI::detail298,8607
+CLI11_INLINE void set_unicode_locale(CLI::detail::set_unicode_locale302,8722
+template <typename F> struct scope_guard_t 313,9095
+    F closure;scope_guard_t::closure314,9140
+    explicit scope_guard_t(scope_guard_t::scope_guard_t316,9156
+    ~scope_guard_t(scope_guard_t::~scope_guard_t317,9218
+template <typename F> CLI11_NODISCARD CLI11_INLINE scope_guard_t<F> scope_guard(320,9258
+CLI11_INLINE std::string narrow_impl(329,9500
+CLI11_INLINE std::wstring widen_impl(360,10581
+CLI11_INLINE std::string narrow(395,11710
+CLI11_INLINE std::string narrow(396,11831
+CLI11_INLINE std::string narrow(398,11966
+CLI11_INLINE std::wstring widen(400,12074
+CLI11_INLINE std::wstring widen(401,12191
+CLI11_INLINE std::wstring widen(403,12324
+CLI11_INLINE std::string narrow(406,12447
+CLI11_INLINE std::wstring widen(407,12558
+CLI11_INLINE std::filesystem::path to_path(411,12752
+namespace detail 425,12967
+namespace detail 434,13148
+CLI11_INLINE std::vector<std::string> compute_win32_argv(detail::compute_win32_argv437,13182
+namespace enums 466,14089
+template <typename T,enums::T469,14146
+template <typename T, typename enums::typename469,14146
+std::ostream &operator<<(enums::operator<<470,14234
+template <typename T> std::string join(489,14993
+template <typename T,507,15529
+          typename Callable,508,15551
+          typename 509,15580
+template <typename T> std::string rjoin(527,16096
+inline std::string &trim(trim552,16923
+inline std::string &trim(trim555,17027
+inline std::string trim_copy(558,17190
+inline std::string trim_copy(576,17959
+template <typename T> bool valid_first_char(586,18393
+template <typename T> bool valid_later_char(591,18587
+inline bool valid_alias_name_string(602,19130
+inline bool is_separator(608,19394
+inline bool isalpha(614,19573
+inline std::string to_lower(619,19769
+inline std::string remove_underscore(627,20034
+inline bool has_default_flag_values(636,20399
+template <typename Callable> inline std::string find_and_modify(650,21184
+namespace detail 712,24415
+CLI11_INLINE std::vector<std::string> split(detail::split713,24434
+CLI11_INLINE std::string &ltrim(ltrim729,24867
+CLI11_INLINE std::string &ltrim(ltrim735,25086
+CLI11_INLINE std::string &rtrim(rtrim741,25337
+CLI11_INLINE std::string &rtrim(rtrim747,25563
+CLI11_INLINE std::string &remove_quotes(remove_quotes754,25829
+CLI11_INLINE std::string &remove_outer(remove_outer764,26141
+CLI11_INLINE std::string fix_newlines(774,26417
+CLI11_INLINE std::ostream &format_aliases(format_aliases786,26807
+CLI11_INLINE bool valid_name_string(803,27336
+CLI11_INLINE std::string find_and_replace(814,27628
+CLI11_INLINE void remove_default_flag_values(826,27941
+find_member(840,28546
+CLI11_INLINE bool has_escapable_character(872,29902
+CLI11_INLINE std::string add_escaped_characters(876,30040
+CLI11_INLINE std::uint32_t hexConvert(891,30449
+CLI11_INLINE char make_char(905,30806
+CLI11_INLINE void append_codepoint(907,30919
+CLI11_INLINE std::string remove_escaped_characters(931,32045
+CLI11_INLINE std::size_t close_string_quote(991,34514
+CLI11_INLINE std::size_t close_literal_quote(1005,34912
+CLI11_INLINE std::size_t close_sequence(1010,35141
+CLI11_INLINE std::vector<std::string> split_up(1057,36415
+CLI11_INLINE std::size_t escape_detect(1097,37764
+CLI11_INLINE std::string binary_escape_string(1109,38246
+CLI11_INLINE bool is_binary_escaped_string(1151,40011
+CLI11_INLINE std::string extract_binary_string(1159,40377
+CLI11_INLINE void remove_quotes(1198,41683
+CLI11_INLINE void handle_secondary_array(1210,42059
+CLI11_INLINE bool process_quoted_string(1222,42512
+std::string get_environment_value(1247,43354
+CLI11_INLINE std::ostream &streamOutAsParagraph(streamOutAsParagraph1268,43909
+#define CLI11_ERROR_DEF(1305,45063
+#define CLI11_ERROR_SIMPLE(1316,46211
+enum class ExitCodes 1321,46565
+    Success ExitCodes::Success1322,46588
+    IncorrectConstruction ExitCodes::IncorrectConstruction1323,46605
+    BadNameString,ExitCodes::BadNameString1324,46638
+    OptionAlreadyAdded,ExitCodes::OptionAlreadyAdded1325,46657
+    FileError,ExitCodes::FileError1326,46681
+    ConversionError,ExitCodes::ConversionError1327,46696
+    ValidationError,ExitCodes::ValidationError1328,46717
+    RequiredError,ExitCodes::RequiredError1329,46738
+    RequiresError,ExitCodes::RequiresError1330,46757
+    ExcludesError,ExitCodes::ExcludesError1331,46776
+    ExtrasError,ExitCodes::ExtrasError1332,46795
+    ConfigError,ExitCodes::ConfigError1333,46812
+    InvalidError,ExitCodes::InvalidError1334,46829
+    HorribleError,ExitCodes::HorribleError1335,46847
+    OptionNotFound,ExitCodes::OptionNotFound1336,46866
+    ArgumentMismatch,ExitCodes::ArgumentMismatch1337,46886
+    BaseClass ExitCodes::BaseClass1338,46908
+class Error 1350,47170
+    int actual_exit_code;Error::actual_exit_code1351,47212
+    CLI11_NODISCARD int get_exit_code(Error::get_exit_code1355,47286
+    CLI11_NODISCARD std::string get_name(Error::get_name1357,47362
+    Error(Error::Error1359,47435
+    Error(Error::Error1362,47627
+class ConstructionError 1368,47856
+class IncorrectConstruction 1373,48043
+    CLI11_ERROR_DEF(IncorrectConstruction::CLI11_ERROR_DEF1374,48100
+    static IncorrectConstruction Set0Opt(IncorrectConstruction::Set0Opt1379,48359
+    static IncorrectConstruction SetFlag(IncorrectConstruction::SetFlag1382,48518
+    static IncorrectConstruction ChangeNotVector(IncorrectConstruction::ChangeNotVector1385,48675
+    static IncorrectConstruction AfterMultiOpt(IncorrectConstruction::AfterMultiOpt1388,48855
+    static IncorrectConstruction MissingOption(IncorrectConstruction::MissingOption1392,49073
+    static IncorrectConstruction MultiOptionPolicy(IncorrectConstruction::MultiOptionPolicy1395,49222
+class BadNameString 1401,49459
+    CLI11_ERROR_DEF(BadNameString::CLI11_ERROR_DEF1402,49508
+    static BadNameString MissingDash(BadNameString::MissingDash1405,49715
+    static BadNameString BadLongName(BadNameString::BadLongName1408,49855
+    static BadNameString BadPositionalName(BadNameString::BadPositionalName1409,49962
+    static BadNameString ReservedName(BadNameString::ReservedName1412,50097
+    static BadNameString MultiPositionalNames(BadNameString::MultiPositionalNames1415,50267
+class OptionAlreadyAdded 1421,50467
+    CLI11_ERROR_DEF(OptionAlreadyAdded::CLI11_ERROR_DEF1422,50521
+    static OptionAlreadyAdded Requires(OptionAlreadyAdded::Requires1425,50721
+    static OptionAlreadyAdded Excludes(OptionAlreadyAdded::Excludes1428,50882
+class ParseError 1436,51103
+class Success 1443,51269
+    CLI11_ERROR_DEF(Success::CLI11_ERROR_DEF1444,51305
+class CallForHelp 1449,51483
+    CLI11_ERROR_DEF(CallForHelp::CLI11_ERROR_DEF1450,51520
+class CallForAllHelp 1455,51736
+    CLI11_ERROR_DEF(CallForAllHelp::CLI11_ERROR_DEF1456,51776
+class CallForVersion 1462,51991
+    CLI11_ERROR_DEF(CallForVersion::CLI11_ERROR_DEF1463,52031
+class RuntimeError 1469,52315
+    CLI11_ERROR_DEF(RuntimeError::CLI11_ERROR_DEF1470,52356
+class FileError 1475,52551
+    CLI11_ERROR_DEF(FileError::CLI11_ERROR_DEF1476,52589
+class ConversionError 1482,52870
+    CLI11_ERROR_DEF(ConversionError::CLI11_ERROR_DEF1483,52914
+    ConversionError(ConversionError::ConversionError1487,53154
+    static ConversionError TooManyInputsFlag(ConversionError::TooManyInputsFlag1489,53317
+    static ConversionError TrueFalse(ConversionError::TrueFalse1492,53459
+class ValidationError 1498,53647
+    CLI11_ERROR_DEF(ValidationError::CLI11_ERROR_DEF1499,53691
+class RequiredError 1505,53933
+    CLI11_ERROR_DEF(RequiredError::CLI11_ERROR_DEF1506,53975
+    static RequiredError Subcommand(RequiredError::Subcommand1508,54135
+    Option(RequiredError::Option1515,54429
+class ArgumentMismatch 1540,55800
+    CLI11_ERROR_DEF(ArgumentMismatch::CLI11_ERROR_DEF1541,55845
+    static ArgumentMismatch AtLeast(ArgumentMismatch::AtLeast1550,56470
+    static ArgumentMismatch AtMost(ArgumentMismatch::AtMost1554,56727
+    static ArgumentMismatch TypedAtLeast(ArgumentMismatch::TypedAtLeast1558,56982
+    static ArgumentMismatch FlagOverride(ArgumentMismatch::FlagOverride1561,57179
+    static ArgumentMismatch PartialType(ArgumentMismatch::PartialType1564,57327
+class RequiresError 1571,57639
+    CLI11_ERROR_DEF(RequiresError::CLI11_ERROR_DEF1572,57681
+class ExcludesError 1578,57925
+    CLI11_ERROR_DEF(ExcludesError::CLI11_ERROR_DEF1579,57967
+class ExtrasError 1585,58223
+    CLI11_ERROR_DEF(ExtrasError::CLI11_ERROR_DEF1586,58263
+    ExtrasError(ExtrasError::ExtrasError1592,58640
+class ConfigError 1601,59074
+    CLI11_ERROR_DEF(ConfigError::CLI11_ERROR_DEF1602,59114
+    static ConfigError NotConfigurable(ConfigError::NotConfigurable1605,59304
+class InvalidError 1611,59512
+    CLI11_ERROR_DEF(InvalidError::CLI11_ERROR_DEF1612,59553
+class HorribleError 1620,59955
+class OptionNotFound 1628,60150
+    CLI11_ERROR_DEF(OptionNotFound::CLI11_ERROR_DEF1629,60188
+#undef CLI11_ERROR_DEF1633,60349
+#undef CLI11_ERROR_SIMPLE1634,60372
+namespace detail 1644,60456
+enum class enabler detail::enabler1647,60565
+constexpr enabler dummy detail::dummy1650,60624
+template <bool B,1658,60988
+template <typename... Ts> struct make_void 1661,61146
+    using type make_void::type1662,61191
+template <typename... Ts> using void_t 1666,61317
+template <bool B,1669,61498
+template <bool B, class T, class F> using conditional_t 1669,61498
+template <typename T> struct is_bool 1672,61661
+template <> struct is_bool<is_bool1675,61785
+template <typename T> struct is_shared_ptr 1678,61890
+template <typename T> struct is_shared_ptr<is_shared_ptr1681,62040
+template <typename T> struct is_shared_ptr<is_shared_ptr1684,62209
+template <typename T> struct is_copyable_ptr 1687,62350
+    static bool const value is_copyable_ptr::value1688,62397
+template <typename T> struct IsMemberType 1692,62558
+    using type IsMemberType::type1693,62602
+template <> struct IsMemberType<IsMemberType1697,62699
+    using type IsMemberType::type1698,62747
+namespace adl_detail 1701,62781
+template <typename T,adl_detail::T1707,63206
+template <typename T, typename S adl_detail::S1707,63206
+namespace detail 1718,63628
+template <typename T,detail::T1726,63885
+template <typename T, typename Enable detail::Enable1726,63885
+    using type 1731,64082
+template <typename T> struct element_value_type 1736,64289
+    using type element_value_type::type1737,64339
+template <typename T,1741,64518
+template <typename T, typename _ 1741,64518
+    : std::true_type 1762,65555
+template <typename T,1788,67098
+template <typename T, typename C> class is_direct_constructible 1788,67098
+    template <typename TT,is_direct_constructible::TT1789,67164
+    template <typename TT,is_direct_constructible::TT1810,67648
+    template <typename TT, typename CC> static auto test(int, std::false_type) -> std::false_type;is_direct_constructible::std::false_type1810,67648
+    template <typename,is_direct_constructible::typename1812,67748
+    template <typename, typename> static auto test(...) -> std::false_type;is_direct_constructible::std::false_type1812,67748
+    static constexpr bool value is_direct_constructible::value1815,67835
+template <typename T,1824,68153
+template <typename T, typename S 1824,68153
+template <typename T,1835,68564
+template <typename T, typename S 1835,68564
+template <typename T> class is_complex 1846,68965
+    template <typename> static auto test(...) -> std::false_type;is_complex::std::false_type1850,69145
+    static constexpr bool value is_complex::value1853,69222
+template <typename T,1857,69342
+template <typename T, enable_if_t<enable_if_t1857,69342
+template <typename T,1865,69607
+template <typename T, enable_if_t<!is_istreamable<T>::value,value1865,69607
+template <typename T,1871,69858
+template <typename T, typename _ 1871,69858
+                                                    std::is_constructible<T, std::wstring>::value,value1886,70780
+                                                std::false_type,1887,70879
+template <typename T,1891,71083
+template <typename T, typename _ 1891,71083
+    : public std::true_type 1899,71467
+template <typename T,1902,71560
+template <typename T, typename _ 1902,71560
+struct is_wrapper<T, conditional_t<false, void_t<typename T::value_type>, void>> : public std::true_type 1906,71729
+template <typename S> class is_tuple_like 1910,72024
+    template <typename SS,is_tuple_like::SS1911,72068
+    template <typename SS, enable_if_t<!is_complex<SS>::value,is_tuple_like::value1911,72068
+    template <typename> static auto test(...) -> std::false_type;is_tuple_like::std::false_type1915,72423
+    static constexpr bool value is_tuple_like::value1918,72500
+template <typename T,1922,72615
+template <typename T, typename Enable 1922,72615
+    static constexpr int value{value1931,73029
+    static constexpr int value{value1937,73233
+    static constexpr int value{value1943,73591
+template <typename T,1947,73756
+template <typename T, enable_if_t<enable_if_t1947,73756
+template <typename T,1953,74009
+          enable_if_t<std::is_constructible<std::string, T>::value && !std::is_convertible<T, std::string>::value,value1954,74031
+template <typename T,1961,74388
+                          is_ostreamable<T>::value,value1963,74528
+template <typename T,1974,74838
+                          !is_ostreamable<T>::value && is_tuple_like<T>::value && type_count_base<T>::value value1976,74978
+template <typename T,1981,75242
+    typename T,1989,75707
+                    !is_tuple_like<T>::value,value1992,75954
+template <typename T,1999,76150
+                          !is_ostreamable<T>::value && is_readable_container<T>::value,value2001,76290
+template <typename T,2020,76889
+inline typename std::enable_if<std::enable_if2021,76926
+template <typename T,2024,77093
+inline typename std::enable_if<(I < type_count_base<T>::value)value2025,77130
+template <typename T,2028,77297
+                          !is_ostreamable<T>::value && is_tuple_like<T>::value && type_count_base<T>::value value2030,77437
+template <typename T,2037,77730
+template <typename T,2048,78228
+inline typename std::enable_if<std::enable_if2049,78265
+template <typename T,2054,78461
+inline typename std::enable_if<(I < type_count_base<T>::value)value2055,78498
+inline typename std::enable_if<(I < type_count_base<T>::value), std::string>::type tuple_value_string(2055,78498
+template <typename T1,2063,78815
+          typename T2,2064,78838
+          typename T,2065,78861
+          enable_if_t<enable_if_t2066,78883
+template <typename T1,2072,79130
+          typename T2,2073,79153
+          typename T,2074,79176
+          enable_if_t<!std::is_same<T1, T2>::value,value2075,79198
+template <typename T,2080,79411
+template <typename T, enable_if_t<enable_if_t2080,79411
+template <typename T,2085,79645
+template <typename T, enable_if_t<enable_if_t2085,79645
+template <typename T,2090,79929
+          enable_if_t<!std::is_enum<T>::value && !std::is_arithmetic<T>::value,value2091,79951
+template <typename T,2097,80239
+template <typename T, typename def,2097,80239
+template <typename T, typename def, typename Enable 2097,80239
+template <typename T,2102,80416
+    using type 2103,80535
+template <typename T,2115,80878
+template <typename T, typename Enable 2115,80878
+    static constexpr int value{value2124,81287
+    static constexpr int value{value2129,81490
+    static constexpr int value{value2134,81742
+    static constexpr int value{value2142,82186
+template <typename T,2146,82297
+constexpr typename std::enable_if<std::enable_if2147,82334
+template <typename T,2152,82493
+    constexpr typename std::enable_if 2153,82530
+template <typename T> struct subtype_count 2163,83013
+template <typename T,2168,83224
+template <typename T, typename Enable 2168,83224
+    static constexpr int value{value2178,83653
+    static constexpr int value{value2183,83879
+    static constexpr int value{value2191,84191
+template <typename T,2195,84309
+constexpr typename std::enable_if<std::enable_if2196,84346
+template <typename T,2201,84509
+    constexpr typename std::enable_if 2202,84546
+template <typename T> struct subtype_count_min 2212,85049
+template <typename T,2219,85392
+template <typename T, typename Enable 2219,85392
+    static constexpr int value{value2228,85783
+    static constexpr int value{value2232,85974
+    static constexpr int value{value2238,86214
+enum class object_category 2242,86366
+    char_value object_category::char_value2243,86401
+    integral_value object_category::integral_value2244,86421
+    unsigned_integral object_category::unsigned_integral2245,86445
+    enumeration object_category::enumeration2246,86472
+    boolean_value object_category::boolean_value2247,86493
+    floating_point object_category::floating_point2248,86516
+    number_constructible object_category::number_constructible2249,86541
+    double_constructible object_category::double_constructible2250,86572
+    integer_constructible object_category::integer_constructible2251,86603
+    string_assignable object_category::string_assignable2253,86660
+    string_constructible object_category::string_constructible2254,86688
+    wstring_assignable object_category::wstring_assignable2255,86719
+    wstring_constructible object_category::wstring_constructible2256,86748
+    other object_category::other2257,86780
+    wrapper_value object_category::wrapper_value2259,86838
+    complex_number object_category::complex_number2260,86862
+    tuple_value object_category::tuple_value2261,86887
+    container_value object_category::container_value2262,86909
+template <typename T,2269,87049
+template <typename T, typename Enable 2269,87049
+    static constexpr object_category value{value2279,87468
+    static constexpr object_category value{value2287,87835
+    static constexpr object_category value{value2293,88085
+    static constexpr object_category value{value2298,88281
+    static constexpr object_category value{value2303,88487
+#define WIDE_STRING_CHECK 2308,88727
+#define STRING_CHECK 2310,88948
+#define WIDE_STRING_CHECK 2312,88980
+#define STRING_CHECK 2313,89011
+    static constexpr object_category value{value2322,89427
+                            !std::is_assignable<T &, std::string>::value && (type_count<T>::value value2330,89717
+    static constexpr object_category value{value2340,90313
+                            !std::is_assignable<T &, std::wstring>::value && (type_count<T>::value value2347,90547
+    static constexpr object_category value{value2354,90965
+    static constexpr object_category value{value2358,91146
+template <typename T> struct uncommon_type 2363,91375
+    using type uncommon_type::type2364,91420
+    static constexpr bool value uncommon_type::value2371,91913
+    static constexpr object_category value{value2379,92247
+                       typename std::enable_if<uncommon_type<T>::value && type_count<T>::value value2385,92409
+                       typename std::enable_if<uncommon_type<T>::value && type_count<T>::value value2394,92884
+                       typename std::enable_if<uncommon_type<T>::value && type_count<T>::value value2403,93364
+    static constexpr object_category value{value2428,94995
+template <typename T,2437,95260
+          enable_if_t<enable_if_t2438,95282
+template <typename T,2443,95454
+          enable_if_t<enable_if_t2444,95476
+template <typename T,2451,95770
+          enable_if_t<enable_if_t2452,95792
+template <typename T,2457,95971
+          enable_if_t<enable_if_t2458,95993
+template <typename T,2467,96421
+          enable_if_t<enable_if_t2468,96443
+template <typename T,2474,96653
+          enable_if_t<enable_if_t2475,96675
+template <typename T,2481,96890
+          enable_if_t<enable_if_t2482,96912
+template <typename T,2488,97121
+          enable_if_t<enable_if_t2489,97143
+template <typename T,2496,97453
+          enable_if_t<enable_if_t2497,97475
+template <typename T,2502,97752
+          enable_if_t<enable_if_t2503,97774
+template <typename T,2509,98100
+          enable_if_t<enable_if_t2510,98122
+template <typename T,2517,98464
+inline typename std::enable_if<std::enable_if2518,98501
+template <typename T,2523,98672
+inline typename std::enable_if<(I < type_count_base<T>::value)value2524,98709
+inline typename std::enable_if<(I < type_count_base<T>::value), std::string>::type tuple_name(2524,98709
+template <typename T,2533,99086
+          enable_if_t<enable_if_t2534,99108
+template <typename T,2543,99464
+          enable_if_t<enable_if_t2544,99486
+template <typename T,2554,99837
+template <typename T, enable_if_t<enable_if_t2554,99837
+template <typename T,2613,102309
+template <typename T, enable_if_t<enable_if_t2613,102309
+inline std::int64_t to_flag_value(2671,104721
+template <typename T,2719,105978
+          enable_if_t<enable_if_t2720,106000
+template <typename T,2728,106356
+          enable_if_t<enable_if_t2729,106378
+template <typename T,2739,106716
+          enable_if_t<enable_if_t2740,106738
+template <typename T,2755,107154
+          enable_if_t<enable_if_t2756,107176
+template <typename T,2785,108149
+          enable_if_t<enable_if_t2786,108171
+template <typename T,2817,109202
+          enable_if_t<enable_if_t2818,109224
+    typename T,2826,109510
+    enable_if_t<enable_if_t2827,109526
+    typename T,2835,109772
+    enable_if_t<enable_if_t2836,109788
+    typename T,2843,110019
+    enable_if_t<enable_if_t2844,110035
+template <typename T,2851,110278
+          enable_if_t<enable_if_t2852,110300
+template <typename T,2863,110663
+          enable_if_t<enable_if_t2864,110685
+template <typename T,2876,111123
+          enable_if_t<enable_if_t2877,111145
+    typename T,2891,111669
+    enable_if_t<enable_if_t2892,111685
+    typename T,2911,112162
+    enable_if_t<enable_if_t2912,112178
+    typename T,2924,112545
+    enable_if_t<enable_if_t2925,112561
+template <typename T,2936,112926
+          enable_if_t<enable_if_t2937,112948
+template <typename T,2962,113854
+          enable_if_t<enable_if_t2963,113876
+template <typename T,2972,114354
+          enable_if_t<enable_if_t2973,114376
+template <typename AssignTo,2985,115163
+          typename ConvertTo,2986,115192
+                          (classify_object<AssignTo>::value value2988,115288
+template <typename AssignTo,2998,115915
+          typename ConvertTo,2999,115944
+template <typename AssignTo,3016,116813
+          typename ConvertTo,3017,116842
+                          classify_object<AssignTo>::value value3019,116990
+template <typename AssignTo,3032,117505
+          typename ConvertTo,3033,117534
+template <typename AssignTo,3060,118458
+          typename ConvertTo,3061,118487
+          enable_if_t<!std::is_same<AssignTo, ConvertTo>::value && std::is_assignable<AssignTo &, ConvertTo &>::value,value3062,118517
+    typename AssignTo,3075,119035
+    typename ConvertTo,3076,119058
+                    std::is_move_assignable<AssignTo>::value,value3078,119198
+template <typename AssignTo,3090,119699
+          typename ConvertTo,3091,119728
+          enable_if_t<enable_if_t3092,119758
+template <typename AssignTo,3101,120278
+          typename ConvertTo,3102,120307
+          enable_if_t<(type_count<AssignTo>::value value3103,120337
+                          type_count<ConvertTo>::value value3124,121457
+template <class AssignTo, class ConvertTo, enable_if_t<enable_if_t3153,122432
+          enable_if_t<is_mutable_container<AssignTo>::value && (expected_count<ConvertTo>::value value3175,123296
+                          type_count_base<ConvertTo>::value value3196,124175
+template <typename AssignTo,3221,125604
+          typename ConvertTo,3222,125633
+inline typename std::enable_if<!is_mutable_container<ConvertTo>::value && type_count<ConvertTo>::value value3248,126845
+                                   type_count<ConvertTo>::value value3258,127439
+inline typename std::enable_if<(I < type_count_base<AssignTo>::value)value3295,129072
+tuple_conversion(3296,129155
+                          type_count_base<ConvertTo>::value value3312,129976
+template <typename AssignTo,3386,133283
+          enable_if_t<enable_if_t3388,133339
+template <typename AssignTo,3405,134021
+          enable_if_t<enable_if_t3407,134077
+inline std::string sum_string_vector(3425,134782
+namespace detail 3460,135565
+CLI11_INLINE std::vector<detail::std::vector3475,136373
+CLI11_INLINE std::tuple<detail::std::tuple3478,136555
+namespace detail 3485,136754
+CLI11_INLINE bool split_short(detail::split_short3487,136774
+CLI11_INLINE bool split_long(3496,137073
+CLI11_INLINE bool split_windows_style(3511,137583
+CLI11_INLINE std::vector<std::string> split_names(3526,138087
+CLI11_INLINE std::vector<std::pair<std::string, std::string>> get_default_flag_values(3537,138456
+get_names(3564,139819
+struct ConfigItem 3620,141693
+    std::vector<std::string> parents{ConfigItem::parents3622,141749
+    std::string name{ConfigItem::name3625,141815
+    std::vector<std::string> inputs{ConfigItem::inputs3627,141865
+    bool multiline{ConfigItem::multiline3629,141974
+    CLI11_NODISCARD std::string fullname(ConfigItem::fullname3631,142052
+class Config 3640,142362
+    std::vector<ConfigItem> items{Config::items3642,142390
+    CLI11_NODISCARD virtual std::string to_flag(Config::to_flag3652,142711
+    CLI11_NODISCARD std::vector<ConfigItem> from_file(Config::from_file3663,143137
+class ConfigBase 3676,143515
+    char commentChar ConfigBase::commentChar3679,143603
+    char arrayStart ConfigBase::arrayStart3681,143705
+    char arrayEnd ConfigBase::arrayEnd3683,143804
+    char arraySeparator ConfigBase::arraySeparator3685,143889
+    char valueDelimiter ConfigBase::valueDelimiter3687,143980
+    char stringQuote ConfigBase::stringQuote3689,144055
+    char literalQuote ConfigBase::literalQuote3691,144157
+    uint8_t maximumLayers{ConfigBase::maximumLayers3693,144233
+    bool commentDefaultsBool ConfigBase::commentDefaultsBool3697,144385
+    bool allowMultipleDuplicateFields{ConfigBase::allowMultipleDuplicateFields3699,144513
+    std::string configSection{ConfigBase::configSection3703,144718
+    ConfigBase *comment(ConfigBase::comment3711,145027
+    ConfigBase *arrayBounds(ConfigBase::arrayBounds3716,145179
+    ConfigBase *arrayDelimiter(ConfigBase::arrayDelimiter3722,145367
+    ConfigBase *valueSeparator(ConfigBase::valueSeparator3727,145524
+    ConfigBase *quoteCharacter(ConfigBase::quoteCharacter3732,145703
+    ConfigBase *maxLayers(ConfigBase::maxLayers3738,145908
+    ConfigBase *parentSeparator(ConfigBase::parentSeparator3743,146066
+    ConfigBase *commentDefaults(ConfigBase::commentDefaults3748,146210
+    std::string &sectionRef(ConfigBase::sectionRef3753,146382
+    CLI11_NODISCARD const std::string &section(ConfigBase::section3755,146462
+    ConfigBase *section(ConfigBase::section3757,146613
+    int16_t &indexRef(ConfigBase::indexRef3763,146787
+    CLI11_NODISCARD int16_t index(ConfigBase::index3765,146865
+    ConfigBase *index(ConfigBase::index3767,147017
+    ConfigBase *allowDuplicateFields(ConfigBase::allowDuplicateFields3772,147216
+using ConfigTOML 3779,147398
+class ConfigINI 3782,147488
+    ConfigINI(ConfigINI::ConfigINI3785,147537
+class Validator 3808,148078
+    std::function<Validator::std::function3811,148190
+    std::function<std::string(std::string &)> func_{Validator::func_3815,148388
+    std::string name_{Validator::name_3817,148540
+    int application_index_ Validator::application_index_3819,148642
+    bool active_{Validator::active_3821,148742
+    bool non_modifying_{Validator::non_modifying_3823,148827
+    Validator(Validator::Validator3825,148860
+        : desc_function_([validator_desc]() { return validator_desc; }), func_(Validator::func_3826,148950
+    explicit Validator(Validator::Validator3831,149150
+    Validator(Validator::Validator3833,149319
+        : desc_function_([validator_desc]() { return validator_desc; }), func_(Validator::func_3834,149440
+          name_(Validator::name_3835,149535
+    Validator &operation(Validator::operation3837,149626
+    std::string operator()(Validator::operator()3847,150065
+    Validator &description(Validator::description3853,150253
+    CLI11_NODISCARD std::string get_description(Validator::get_description3861,150584
+    Validator &name(Validator::name3868,150779
+    CLI11_NODISCARD Validator name(Validator::name3873,150932
+    CLI11_NODISCARD const std::string &get_name(Validator::get_name3879,151153
+    Validator &active(Validator::active3881,151282
+    CLI11_NODISCARD Validator active(Validator::active3886,151443
+    Validator &non_modifying(Validator::non_modifying3893,151674
+    Validator &application_index(Validator::application_index3898,151845
+    CLI11_NODISCARD Validator application_index(Validator::application_index3903,152016
+    CLI11_NODISCARD int get_application_index(Validator::get_application_index3909,152251
+    CLI11_NODISCARD bool get_active(Validator::get_active3911,152385
+    CLI11_NODISCARD bool get_modifying(Validator::get_modifying3914,152560
+class CustomValidator 3932,153289
+namespace detail 3938,153547
+enum class path_type detail::path_type3941,153611
+enum class path_type { nonexistent,detail::path_type::nonexistent3941,153611
+enum class path_type { nonexistent, file,detail::path_type::file3941,153611
+enum class path_type { nonexistent, file, directory detail::path_type::directory3941,153611
+class ExistingFileValidator detail::ExistingFileValidator3947,153846
+class ExistingDirectoryValidator 3953,154013
+class ExistingPathValidator 3959,154146
+class NonexistentPathValidator 3965,154273
+class IPV4Validator 3971,154425
+class EscapedStringTransformer 3976,154501
+const detail::ExistingFileValidator ExistingFile;3986,154758
+const detail::ExistingDirectoryValidator ExistingDirectory;3989,154884
+const detail::ExistingPathValidator ExistingPath;3992,154976
+const detail::NonexistentPathValidator NonexistentPath;3995,155062
+const detail::IPV4Validator ValidIPV4;3998,155148
+const detail::EscapedStringTransformer EscapedString;4001,155248
+template <typename DesiredType> class TypeValidator 4004,155347
+    explicit TypeValidator(TypeValidator::TypeValidator4006,155430
+    TypeValidator(TypeValidator::TypeValidator4015,155886
+class FileOnDefaultPath 4023,156177
+class Range 4029,156383
+    Range(Range::Range4036,156659
+    explicit Range(Range::Range4059,157554
+class Bound 4070,158108
+    template <typename T> Bound(Bound::Bound4076,158356
+    template <typename T> explicit Bound(Bound::Bound4098,159136
+namespace detail 4101,159231
+template <typename T,detail::T4102,159250
+          enable_if_t<detail::enable_if_t4103,159272
+    typename T,4109,159474
+    enable_if_t<!is_copyable_ptr<typename std::remove_reference<T>::type>::value,value4110,159490
+template <typename T> std::string generate_set(4115,159737
+template <typename T> std::string generate_map(4128,160266
+template <typename C,4148,161016
+template <typename C, typename V> struct has_find 4148,161016
+    template <typename CC,has_find::CC4149,161068
+    template <typename,has_find::typename4151,161210
+    static const auto value has_find::value4153,161299
+    using type has_find::type4154,161361
+template <typename T,4158,161441
+template <typename T, typename V,4158,161441
+template <typename T, typename V, enable_if_t<!has_find<T, V>::value,value4158,161441
+template <typename T,4169,162048
+template <typename T, typename V,4169,162048
+template <typename T, typename V, enable_if_t<enable_if_t4169,162048
+template <typename T,4177,162428
+    -> std::pair<std::pair4179,162546
+inline typename std::enable_if<std::is_signed<T>::value, T>::type overflowCheck(4201,163460
+inline typename std::enable_if<!std::is_signed<T>::value,value4209,163834
+inline typename std::enable_if<!std::is_signed<T>::value, T>::type overflowCheck(4209,163834
+template <typename T> typename std::enable_if<std::is_integral<T>::value, bool>::type checked_multiply(4214,164082
+typename std::enable_if<std::is_floating_point<T>::value, bool>::type checked_multiply(4231,164591
+class IsMember 4242,164880
+    using filter_fn_t IsMember::filter_fn_t4244,164926
+    template <typename T,IsMember::T4247,165060
+    IsMember(IsMember::IsMember4248,165104
+    template <typename T> explicit IsMember(IsMember::IsMember4252,165309
+    template <typename T,IsMember::T4256,165598
+    template <typename T, typename F> explicit IsMember(IsMember::IsMember4256,165598
+    template <typename T,IsMember::T4300,167835
+    IsMember(IsMember::IsMember4301,167879
+template <typename T> using TransformPairs 4309,168204
+class Transformer 4312,168340
+    using filter_fn_t Transformer::filter_fn_t4314,168389
+    Transformer(Transformer::Transformer4318,168529
+    template <typename T> explicit Transformer(Transformer::Transformer4322,168769
+    template <typename T,Transformer::T4326,169072
+    template <typename T, typename F> explicit Transformer(Transformer::Transformer4326,169072
+    template <typename T,Transformer::T4362,171063
+    Transformer(Transformer::Transformer4363,171107
+class CheckedTransformer 4371,171444
+    using filter_fn_t CheckedTransformer::filter_fn_t4373,171500
+    CheckedTransformer(CheckedTransformer::CheckedTransformer4377,171640
+    template <typename T> explicit CheckedTransformer(CheckedTransformer::CheckedTransformer4381,171894
+    template <typename T,CheckedTransformer::T4385,172203
+    template <typename T, typename F> explicit CheckedTransformer(CheckedTransformer::CheckedTransformer4385,172203
+    template <typename T,CheckedTransformer::T4439,174883
+    CheckedTransformer(CheckedTransformer::CheckedTransformer4440,174927
+inline std::string ignore_case(4448,175307
+inline std::string ignore_underscore(4451,175477
+inline std::string ignore_space(4454,175668
+class AsNumberWithUnit 4471,176454
+    enum Options AsNumberWithUnit::Options4477,176746
+        CASE_SENSITIVE AsNumberWithUnit::Options::CASE_SENSITIVE4478,176765
+        CASE_INSENSITIVE AsNumberWithUnit::Options::CASE_INSENSITIVE4479,176793
+        UNIT_OPTIONAL AsNumberWithUnit::Options::UNIT_OPTIONAL4480,176823
+        UNIT_REQUIRED AsNumberWithUnit::Options::UNIT_REQUIRED4481,176850
+        DEFAULT AsNumberWithUnit::Options::DEFAULT4482,176877
+        DEFAULT = CASE_INSENSITIVE AsNumberWithUnit::Options::CASE_INSENSITIVE4482,176877
+        DEFAULT = CASE_INSENSITIVE | UNIT_OPTIONALAsNumberWithUnit::Options::UNIT_OPTIONAL4482,176877
+    explicit AsNumberWithUnit(AsNumberWithUnit::AsNumberWithUnit4486,176967
+    template <typename Number> static void validate_mapping(AsNumberWithUnit::validate_mapping4562,180021
+    template <typename Number> static std::string generate_description(AsNumberWithUnit::generate_description4588,181104
+inline AsNumberWithUnit::Options operator|(4600,181460
+class AsSizeValue 4615,182138
+    using result_t AsSizeValue::result_t4617,182194
+    static std::map<AsSizeValue::std::map4630,182696
+    static std::map<AsSizeValue::std::map4633,182804
+namespace detail 4636,182881
+CLI11_INLINE std::pair<detail::std::pair4641,183171
+CLI11_INLINE std::string Validator::operator()(Validator::operator()4649,183300
+CLI11_NODISCARD CLI11_INLINE Validator Validator::description(4662,183616
+CLI11_INLINE Validator Validator::operator&(4668,183840
+CLI11_INLINE Validator Validator::operator|(4690,184589
+CLI11_INLINE Validator Validator::operator!(4712,185322
+Validator::_merge_description(4735,186122
+namespace detail 4750,186632
+CLI11_INLINE path_type check_path(detail::check_path4753,186713
+CLI11_INLINE path_type check_path(4777,187574
+CLI11_INLINE ExistingFileValidator::ExistingFileValidator(4793,188036
+CLI11_INLINE ExistingDirectoryValidator::ExistingDirectoryValidator(4806,188496
+CLI11_INLINE ExistingPathValidator::ExistingPathValidator(4819,188965
+CLI11_INLINE NonexistentPathValidator::NonexistentPathValidator(4829,189311
+CLI11_INLINE IPV4Validator::IPV4Validator(4839,189667
+CLI11_INLINE EscapedStringTransformer::EscapedStringTransformer(4860,190427
+CLI11_INLINE FileOnDefaultPath::FileOnDefaultPath(4881,191213
+CLI11_INLINE AsSizeValue::AsSizeValue(4905,192180
+CLI11_INLINE std::map<std::string, AsSizeValue::result_t> AsSizeValue::init_mapping(4913,192437
+CLI11_INLINE std::map<std::string, AsSizeValue::result_t> AsSizeValue::get_mapping(4931,192939
+namespace detail 4940,193188
+CLI11_INLINE std::pair<detail::std::pair4942,193208
+CLI11_INLINE std::pair<std::string, std::string> split_program_name(detail::split_program_name4942,193208
+enum class AppFormatMode 5001,195330
+    Normal,AppFormatMode::Normal5002,195357
+    All,AppFormatMode::All5003,195401
+    Sub,AppFormatMode::Sub5004,195441
+class FormatterBase 5011,195675
+    std::size_t column_width_{FormatterBase::column_width_5017,195808
+    std::size_t right_column_width_{FormatterBase::right_column_width_5020,195925
+    std::size_t description_paragraph_width_{FormatterBase::description_paragraph_width_5023,196033
+    std::size_t footer_paragraph_width_{FormatterBase::footer_paragraph_width_5026,196126
+    std::map<FormatterBase::std::map5030,196280
+    std::map<std::string, std::string> labels_{FormatterBase::labels_5030,196280
+    virtual ~FormatterBase(FormatterBase::~FormatterBase5044,196705
+    void label(FormatterBase::label5054,197006
+    void column_width(FormatterBase::column_width5057,197142
+    void right_column_width(FormatterBase::right_column_width5060,197285
+    void description_paragraph_width(FormatterBase::description_paragraph_width5063,197425
+    void footer_paragraph_width(FormatterBase::footer_paragraph_width5066,197559
+    CLI11_NODISCARD std::string get_label(FormatterBase::get_label5073,197744
+    CLI11_NODISCARD std::size_t get_column_width(FormatterBase::get_column_width5080,197991
+    CLI11_NODISCARD std::size_t get_right_column_width(FormatterBase::get_right_column_width5083,198161
+    CLI11_NODISCARD std::size_t get_description_paragraph_width(FormatterBase::get_description_paragraph_width5086,198328
+    CLI11_NODISCARD std::size_t get_footer_paragraph_width(FormatterBase::get_footer_paragraph_width5089,198489
+class FormatterLambda final : public FormatterBase 5095,198661
+class Formatter 5116,199524
+using results_t 5184,201890
+using callback_t 5186,201967
+using Option_p 5191,202053
+enum class MultiOptionPolicy 5193,202147
+    Throw,MultiOptionPolicy::Throw5194,202185
+    TakeLast,MultiOptionPolicy::TakeLast5195,202255
+    TakeFirst,MultiOptionPolicy::TakeFirst5196,202324
+    Join,MultiOptionPolicy::Join5197,202394
+    TakeAll,MultiOptionPolicy::TakeAll5198,202511
+    Sum,MultiOptionPolicy::Sum5199,202576
+    Reverse,MultiOptionPolicy::Reverse5200,202683
+template <typename CRTP> class OptionBase 5205,202935
+    std::string group_ OptionBase::group_5210,203038
+    bool required_{OptionBase::required_5213,203130
+    bool ignore_case_{OptionBase::ignore_case_5216,203216
+    bool ignore_underscore_{OptionBase::ignore_underscore_5219,203308
+    bool configurable_{OptionBase::configurable_5222,203407
+    bool disable_flag_override_{OptionBase::disable_flag_override_5225,203491
+    bool always_capture_default_{OptionBase::always_capture_default_5231,203663
+    MultiOptionPolicy multi_option_policy_{OptionBase::multi_option_policy_5234,203776
+    CRTP *group(OptionBase::group5243,204044
+    CRTP *required(OptionBase::required5252,204357
+    CRTP *mandatory(OptionBase::mandatory5258,204502
+    CRTP *always_capture_default(OptionBase::always_capture_default5260,204570
+    CLI11_NODISCARD const std::string &get_group(OptionBase::get_group5268,204767
+    CLI11_NODISCARD bool get_required(OptionBase::get_required5271,204886
+    CLI11_NODISCARD bool get_ignore_case(OptionBase::get_ignore_case5274,204989
+    CLI11_NODISCARD bool get_ignore_underscore(OptionBase::get_ignore_underscore5277,205104
+    CLI11_NODISCARD bool get_configurable(OptionBase::get_configurable5280,205226
+    CLI11_NODISCARD bool get_disable_flag_override(OptionBase::get_disable_flag_override5283,205338
+    CLI11_NODISCARD char get_delimiter(OptionBase::get_delimiter5286,205472
+    CLI11_NODISCARD bool get_always_capture_default(OptionBase::get_always_capture_default5289,205634
+    CLI11_NODISCARD MultiOptionPolicy get_multi_option_policy(OptionBase::get_multi_option_policy5292,205777
+    CRTP *take_last(OptionBase::take_last5297,205972
+    CRTP *take_first(OptionBase::take_first5304,206185
+    CRTP *take_all(OptionBase::take_all5311,206409
+    CRTP *join(OptionBase::join5318,206614
+    CRTP *join(OptionBase::join5325,206839
+    CRTP *configurable(OptionBase::configurable5333,207075
+    CRTP *delimiter(OptionBase::delimiter5339,207237
+class OptionDefaults 5347,207493
+    OptionDefaults *multi_option_policy(OptionDefaults::multi_option_policy5354,207740
+    OptionDefaults *ignore_case(OptionDefaults::ignore_case5360,207943
+    OptionDefaults *ignore_underscore(OptionDefaults::ignore_underscore5366,208100
+    OptionDefaults *disable_flag_override(OptionDefaults::disable_flag_override5372,208289
+    OptionDefaults *delimiter(OptionDefaults::delimiter5378,208511
+class Option 5384,208621
+    std::vector<std::string> snames_{Option::snames_5392,208793
+    std::vector<std::string> lnames_{Option::lnames_5395,208905
+    std::vector<Option::std::vector5399,209151
+    std::vector<std::pair<std::string, std::string>> default_flag_values_{Option::default_flag_values_5399,209151
+    std::vector<std::string> fnames_{Option::fnames_5402,209289
+    std::string pname_{Option::pname_5405,209356
+    std::string envname_{Option::envname_5408,209439
+    std::string description_{Option::description_5415,209549
+    std::string default_str_{Option::default_str_5418,209676
+    std::string option_text_{Option::option_text_5421,209802
+    std::function<Option::std::function5426,210007
+    std::function<Option::std::function5429,210150
+    int type_size_max_{Option::type_size_max_5437,210386
+    int type_size_min_{Option::type_size_min_5439,210483
+    int expected_min_{Option::expected_min_5442,210557
+    int expected_max_{Option::expected_max_5444,210629
+    std::vector<Validator> validators_{Option::validators_5447,210713
+    std::set<Option *> needs_{Option::needs_5450,210817
+    std::set<Option *> excludes_{Option::excludes_5453,210912
+    App *parent_{Option::parent_5460,211045
+    callback_t callback_{Option::callback_5463,211125
+    results_t results_{Option::results_5470,211241
+    results_t proc_results_{Option::proc_results_5472,211299
+    enum class option_state Option::option_state5474,211379
+        parsing Option::option_state::parsing5475,211416
+        validated Option::option_state::validated5476,211498
+        reduced Option::option_state::reduced5477,211562
+        callback_run Option::option_state::callback_run5478,211633
+    option_state current_option_state_{option_state::parsing}Option::option_state::parsing5481,211765
+    bool allow_extra_args_{false}Option::false5483,211899
+    bool flag_like_{false}Option::false5485,212007
+    bool run_callback_for_default_{false}Option::false5487,212097
+    bool inject_separator_{false}Option::false5489,212222
+    bool trigger_on_result_{false}Option::false5491,212373
+    bool force_callback_{false}Option::false5493,212509
+    Option(Option::Option5497,212635
+    CLI11_NODISCARD std::size_t count(Option::count5514,213232
+    CLI11_NODISCARD bool empty(Option::empty5517,213349
+    explicit operator bool(Option::operator bool5520,213520
+    void clear(Option::clear5523,213650
+    Option *allow_extra_args(Option::allow_extra_args5540,214125
+    CLI11_NODISCARD bool get_allow_extra_args(Option::get_allow_extra_args5545,214287
+    Option *trigger_on_parse(Option::trigger_on_parse5547,214489
+    CLI11_NODISCARD bool get_trigger_on_parse(Option::get_trigger_on_parse5552,214641
+    Option *force_callback(Option::force_callback5555,214767
+    CLI11_NODISCARD bool get_force_callback(Option::get_force_callback5560,214912
+    Option *run_callback_for_default(Option::run_callback_for_default5564,215203
+    CLI11_NODISCARD bool get_run_callback_for_default(Option::get_run_callback_for_default5569,215389
+    Option *needs(Option::needs5597,216750
+    template <typename T Option::T5605,216915
+    template <typename A,Option::A5614,217257
+    template <typename A, typename B,Option::B5614,217257
+    template <typename A, typename B, typename... ARG> Option *needs(Option::needs5614,217257
+    template <typename T Option::T5626,217707
+    template <typename A,Option::A5635,218055
+    template <typename A, typename B,Option::B5635,218055
+    template <typename A, typename B, typename... ARG> Option *excludes(Option::excludes5635,218055
+    Option *envname(Option::envname5644,218427
+    template <typename T Option::T5653,218713
+    template <typename T Option::T5659,218995
+    Option *disable_flag_override(Option::disable_flag_override5665,219309
+    CLI11_NODISCARD int get_type_size(Option::get_type_size5674,219527
+    CLI11_NODISCARD int get_type_size_min(Option::get_type_size_min5677,219660
+    CLI11_NODISCARD int get_type_size_max(Option::get_type_size_max5679,219796
+    CLI11_NODISCARD bool get_inject_separator(Option::get_inject_separator5682,219915
+    CLI11_NODISCARD std::string get_envname(Option::get_envname5685,220058
+    CLI11_NODISCARD std::set<Option *> get_needs(Option::get_needs5688,220166
+    CLI11_NODISCARD std::set<Option *> get_excludes(Option::get_excludes5691,220279
+    CLI11_NODISCARD std::string get_default_str(Option::get_default_str5694,220408
+    CLI11_NODISCARD callback_t get_callback(Option::get_callback5697,220524
+    CLI11_NODISCARD const std::vector<std::string> &get_lnames(Option::get_lnames5700,220626
+    CLI11_NODISCARD const std::vector<std::string> &get_snames(Option::get_snames5703,220746
+    CLI11_NODISCARD const std::vector<std::string> &get_fnames(Option::get_fnames5706,220895
+    CLI11_NODISCARD const std::string &get_single_name(Option::get_single_name5708,221066
+    CLI11_NODISCARD int get_expected(Option::get_expected5721,221435
+    CLI11_NODISCARD int get_expected_min(Option::get_expected_min5724,221569
+    CLI11_NODISCARD int get_expected_max(Option::get_expected_max5726,221710
+    CLI11_NODISCARD int get_items_expected_min(Option::get_items_expected_min5729,221853
+    CLI11_NODISCARD int get_items_expected_max(Option::get_items_expected_max5732,222042
+    CLI11_NODISCARD int get_items_expected(Option::get_items_expected5737,222302
+    CLI11_NODISCARD bool get_positional(Option::get_positional5740,222442
+    CLI11_NODISCARD bool nonpositional(Option::nonpositional5743,222579
+    CLI11_NODISCARD bool has_description(Option::has_description5746,222717
+    CLI11_NODISCARD const std::string &get_description(Option::get_description5749,222829
+    Option *description(Option::description5752,222946
+    Option *option_text(Option::option_text5757,223086
+    CLI11_NODISCARD const std::string &get_option_text(Option::get_option_text5762,223198
+    bool operator==(Option::operator==5787,224147
+    CLI11_NODISCARD bool check_sname(Option::check_sname5793,224439
+    CLI11_NODISCARD bool check_lname(Option::check_lname5798,224640
+    CLI11_NODISCARD bool check_fname(Option::check_fname5803,224861
+    CLI11_NODISCARD const results_t &results(Option::results5824,225686
+    template <typename T> void results(Option::results5830,225895
+    template <typename T> CLI11_NODISCARD T as(Option::as5861,227115
+    CLI11_NODISCARD bool get_callback_run(Option::get_callback_run5868,227294
+    Option *type_name_fn(Option::type_name_fn5875,227528
+    Option *type_name(Option::type_name5881,227701
+    void inject_separator(Option::inject_separator5893,228082
+    Option *default_function(Option::default_function5896,228227
+    Option *capture_default_str(Option::capture_default_str5902,228444
+    Option *default_str(Option::default_str5910,228688
+    template <typename X> Option *default_val(Option::default_val5917,228994
+template <typename CRTP> template <typename T> void OptionBase<CRTP>::copy_to(copy_to5983,231625
+CLI11_INLINE Option *Option::expected(Option::expected5995,232116
+CLI11_INLINE Option *Option::expected(Option::expected6016,232728
+CLI11_INLINE Option *Option::check(Option::check6035,233157
+CLI11_INLINE Option *Option::check(Option::check6043,233431
+CLI11_INLINE Option *Option::transform(Option::transform6051,233822
+CLI11_INLINE Option *Option::transform(Option::transform6058,234088
+CLI11_INLINE Option *Option::each(Option::each6073,234724
+CLI11_INLINE Validator *Option::get_validator(Option::get_validator6083,234987
+CLI11_INLINE Validator *Option::get_validator(Option::get_validator6095,235405
+CLI11_INLINE bool Option::remove_needs(6103,235757
+CLI11_INLINE Option *Option::excludes(Option::excludes6113,236001
+CLI11_INLINE bool Option::remove_excludes(6128,236486
+template <typename T> Option *Option::ignore_case(Option::ignore_case6138,236745
+template <typename T> Option *Option::ignore_underscore(Option::ignore_underscore6158,237379
+CLI11_INLINE Option *Option::multi_option_policy(Option::multi_option_policy6179,238050
+CLI11_NODISCARD CLI11_INLINE std::string Option::get_name(6192,238641
+CLI11_INLINE void Option::run_callback(6245,240354
+CLI11_NODISCARD CLI11_INLINE const std::string &Option::matching_name(Option::matching_name6275,241382
+CLI11_NODISCARD CLI11_INLINE bool Option::check_name(6313,242891
+CLI11_NODISCARD CLI11_INLINE std::string Option::get_flag_value(6342,243872
+CLI11_INLINE Option *Option::add_result(Option::add_result6388,245914
+CLI11_INLINE Option *Option::add_result(Option::add_result6394,246083
+CLI11_INLINE Option *Option::add_result(Option::add_result6400,246288
+CLI11_NODISCARD CLI11_INLINE results_t Option::reduced_results(6408,246507
+CLI11_INLINE Option *Option::type_size(Option::type_size6426,247060
+CLI11_INLINE Option *Option::type_size(Option::type_size6445,247685
+CLI11_NODISCARD CLI11_INLINE std::string Option::get_type_name(6469,248545
+CLI11_INLINE void Option::_validate_results(6482,248948
+CLI11_INLINE void Option::_reduce_results(6522,250776
+CLI11_INLINE std::string Option::_validate(6600,254114
+CLI11_INLINE int Option::_add_result(6622,254733
+#define CLI11_PARSE(6685,256807
+namespace detail 6693,257426
+enum class Classifier detail::Classifier6694,257445
+enum class Classifier { NONE,detail::Classifier::NONE6694,257445
+enum class Classifier { NONE, POSITIONAL_MARK,detail::Classifier::POSITIONAL_MARK6694,257445
+enum class Classifier { NONE, POSITIONAL_MARK, SHORT,detail::Classifier::SHORT6694,257445
+enum class Classifier { NONE, POSITIONAL_MARK, SHORT, LONG,detail::Classifier::LONG6694,257445
+enum class Classifier { NONE, POSITIONAL_MARK, SHORT, LONG, WINDOWS_STYLE,detail::Classifier::WINDOWS_STYLE6694,257445
+enum class Classifier { NONE, POSITIONAL_MARK, SHORT, LONG, WINDOWS_STYLE, SUBCOMMAND,detail::Classifier::SUBCOMMAND6694,257445
+enum class Classifier { NONE, POSITIONAL_MARK, SHORT, LONG, WINDOWS_STYLE, SUBCOMMAND, SUBCOMMAND_TERMINATOR detail::Classifier::SUBCOMMAND_TERMINATOR6694,257445
+namespace FailureMessage 6698,257599
+enum class config_extras_mode 6708,258020
+enum class config_extras_mode : char { error config_extras_mode::error6708,258020
+enum class config_extras_mode : char { error = 0, ignore,config_extras_mode::ignore6708,258020
+enum class config_extras_mode : char { error = 0, ignore, ignore_all,config_extras_mode::ignore_all6708,258020
+enum class config_extras_mode : char { error = 0, ignore, ignore_all, capture config_extras_mode::capture6708,258020
+using App_p 6712,258114
+namespace detail 6714,258151
+template <typename T,detail::T6717,258246
+template <typename T, enable_if_t<!std::is_integral<T>::value || (sizeof(detail::sizeof6717,258246
+template <typename T,6723,258477
+template <typename T, enable_if_t<std::is_integral<T>::value && (sizeof(T) > 1U)U6723,258477
+class App 6735,259162
+    std::string name_{App::name_6746,259431
+    std::string description_{App::description_6749,259511
+    bool allow_extras_{App::allow_extras_6752,259623
+    config_extras_mode allow_config_extras_{App::allow_config_extras_6756,259832
+    bool prefix_command_{App::prefix_command_6759,260002
+    bool has_automatic_name_{App::has_automatic_name_6762,260137
+    bool required_{App::required_6765,260272
+    bool disabled_{App::disabled_6768,260391
+    bool pre_parse_called_{App::pre_parse_called_6771,260490
+    bool immediate_callback_{App::immediate_callback_6775,260707
+    std::function<App::std::function6778,260812
+    std::function<App::std::function6781,260937
+    std::function<App::std::function6784,261063
+    OptionDefaults option_defaults_{App::option_defaults_6791,261232
+    std::vector<Option_p> options_{App::options_6794,261316
+    std::string usage_{App::usage_6801,261484
+    std::function<App::std::function6804,261620
+    std::string footer_{App::footer_6807,261744
+    std::function<App::std::function6810,261869
+    Option *help_ptr_{App::help_ptr_6813,261986
+    Option *help_all_ptr_{App::help_all_ptr_6816,262086
+    Option *version_ptr_{App::version_ptr_6819,262175
+    std::function<std::string(const App *, const Error &e)> failure_message_{App::failure_message_6825,262426
+    using missing_t App::missing_t6831,262572
+    missing_t missing_{App::missing_6836,262887
+    std::vector<Option *> parse_order_{App::parse_order_6839,262990
+    std::vector<App *> parsed_subcommands_{App::parsed_subcommands_6842,263095
+    std::set<App *> exclude_subcommands_{App::exclude_subcommands_6845,263214
+    std::set<Option *> exclude_options_{App::exclude_options_6849,263392
+    std::set<App *> need_subcommands_{App::need_subcommands_6853,263602
+    std::set<Option *> need_options_{App::need_options_6857,263791
+    std::vector<App_p> subcommands_{App::subcommands_6864,263915
+    bool ignore_case_{App::ignore_case_6867,264023
+    bool ignore_underscore_{App::ignore_underscore_6870,264121
+    bool fallthrough_{App::fallthrough_6874,264297
+    bool subcommand_fallthrough_{App::subcommand_fallthrough_6877,264442
+    bool allow_windows_style_options_{App::allow_windows_style_options_6880,264597
+    bool positionals_at_end_{App::positionals_at_end_6888,264796
+    enum class startup_mode App::startup_mode6890,264834
+    enum class startup_mode : char { stable,App::startup_mode::stable6890,264834
+    enum class startup_mode : char { stable, enabled,App::startup_mode::enabled6890,264834
+    enum class startup_mode : char { stable, enabled, disabled App::startup_mode::disabled6890,264834
+    startup_mode default_startup{startup_mode::stable}App::startup_mode::stable6893,265023
+    bool configurable_{false}App::false6896,265171
+    bool validate_positionals_{false}App::false6899,265288
+    bool validate_optional_arguments_{false}App::false6902,265420
+    bool silent_{false}App::false6906,265613
+    bool allow_non_standard_options_{false}App::false6909,265747
+    std::uint32_t parsed_{0U}App::U6912,265863
+    std::size_t require_subcommand_min_{App::require_subcommand_min_6915,265951
+    std::size_t require_subcommand_max_{App::require_subcommand_max_6918,266100
+    std::size_t require_option_min_{App::require_option_min_6921,266197
+    std::size_t require_option_max_{App::require_option_max_6924,266310
+    App *parent_{nullptr}App::nullptr6927,266407
+    std::vector<std::string> aliases_{App::aliases_6933,266555
+    Option *config_ptr_{nullptr}App::nullptr6940,266676
+    std::vector<std::string> normalized_argv_{App::normalized_argv_6949,266988
+    std::vector<char *> normalized_argv_view_{App::normalized_argv_view_6952,267138
+    explicit App(App::App6963,267455
+    App *callback(App::callback6983,268268
+    App *final_callback(App::final_callback6994,268643
+    App *parse_complete_callback(App::parse_complete_callback7001,268865
+    App *preparse_callback(App::preparse_callback7008,269082
+    App *allow_extras(App::allow_extras7020,269497
+    App *required(App::required7026,269671
+    App *disabled(App::disabled7032,269816
+    App *silent(App::silent7038,269983
+    App *allow_non_standard_option_names(App::allow_non_standard_option_names7044,270117
+    App *disabled_by_default(App::disabled_by_default7050,270367
+    App *enabled_by_default(App::enabled_by_default7061,270803
+    App *validate_positionals(App::validate_positionals7075,271339
+    App *validate_optional_arguments(App::validate_optional_arguments7081,271545
+    App *allow_config_extras(App::allow_config_extras7087,271721
+    App *allow_config_extras(App::allow_config_extras7098,272044
+    App *prefix_command(App::prefix_command7105,272302
+    App *allow_windows_style_options(App::allow_windows_style_options7115,272634
+    App *positionals_at_end(App::positionals_at_end7121,272848
+    App *configurable(App::configurable7127,273032
+    App *formatter(App::formatter7136,273267
+    App *formatter_fn(App::formatter_fn7142,273409
+    App *config_formatter(App::config_formatter7148,273628
+    CLI11_NODISCARD bool parsed(App::parsed7154,273837
+    OptionDefaults *option_defaults(App::option_defaults7157,273963
+    template <typename AssignTo,App::AssignTo7184,275057
+              typename ConvertTo App::ConvertTo7185,275090
+    template <typename AssignTo,App::AssignTo7210,276433
+    template <typename AssignTo, enable_if_t<!std::is_const<AssignTo>::value,App::value7210,276433
+    Option *add_option_function(App::add_option_function7229,277418
+    Option *add_option(App::add_option7250,278337
+    template <typename T,App::T7255,278555
+              enable_if_t<std::is_const<T>::value && std::is_constructible<std::string, T>::value,App::value7256,278581
+    Option *add_flag(App::add_flag7284,280082
+    template <typename T,App::T7289,280411
+              enable_if_t<std::is_const<T>::value && std::is_constructible<std::string, T>::value,App::value7290,280437
+    template <typename T,App::T7298,280905
+                              !std::is_constructible<App::std::is_constructible7300,281028
+                              !std::is_constructible<std::function<void(int)>, T>::value,App::value7300,281028
+    template <typename T,App::T7315,281751
+              enable_if_t<!std::is_assignable<std::function<void(std::int64_t)> &, T>::value,App::value7316,281777
+    Option *add_flag(App::add_flag7347,283357
+    template <typename T App::T7364,284202
+    CLI11_NODISCARD std::size_t count(App::count7419,286759
+    App *group(App::group7426,287056
+    App *require_subcommand(App::require_subcommand7432,287237
+    App *require_subcommand(App::require_subcommand7441,287582
+    App *require_subcommand(App::require_subcommand7454,288106
+    App *require_option(App::require_option7461,288359
+    App *require_option(App::require_option7470,288665
+    App *require_option(App::require_option7483,289165
+    App *fallthrough(App::fallthrough7491,289489
+    App *subcommand_fallthrough(App::subcommand_fallthrough7497,289683
+    explicit operator bool(App::operator bool7504,289955
+    virtual void pre_callback(App::pre_callback7513,290220
+    void failure_message(App::failure_message7548,291597
+    CLI11_NODISCARD std::size_t count(App::count7560,292005
+    CLI11_NODISCARD std::vector<App *> get_subcommands(App::get_subcommands7564,292311
+    bool got_subcommand(App::got_subcommand7575,292927
+    CLI11_NODISCARD bool got_subcommand(App::got_subcommand7581,293185
+    App *excludes(App::excludes7587,293450
+    App *excludes(App::excludes7596,293693
+    App *needs(App::needs7611,294138
+    App *needs(App::needs7619,294322
+    App *usage(App::usage7646,295089
+    App *usage(App::usage7651,295220
+    App *footer(App::footer7656,295382
+    App *footer(App::footer7661,295518
+    CLI11_NODISCARD std::string config_to_str(App::config_to_str7667,295889
+    CLI11_NODISCARD std::shared_ptr<FormatterBase> get_formatter(App::get_formatter7682,296481
+    CLI11_NODISCARD std::shared_ptr<Config> get_config_formatter(App::get_config_formatter7685,296614
+    CLI11_NODISCARD std::shared_ptr<ConfigBase> get_config_formatter_base(App::get_config_formatter_base7688,296778
+    CLI11_NODISCARD std::string get_description(App::get_description7698,297188
+    App *description(App::description7701,297309
+    CLI11_NODISCARD const Option *get_option(App::get_option7719,298109
+    Option *get_option(App::get_option7728,298410
+    CLI11_NODISCARD bool get_ignore_case(App::get_ignore_case7743,299006
+    CLI11_NODISCARD bool get_ignore_underscore(App::get_ignore_underscore7746,299127
+    CLI11_NODISCARD bool get_fallthrough(App::get_fallthrough7749,299254
+    CLI11_NODISCARD bool get_subcommand_fallthrough(App::get_subcommand_fallthrough7752,299380
+    CLI11_NODISCARD bool get_allow_windows_style_options(App::get_allow_windows_style_options7755,299537
+    CLI11_NODISCARD bool get_positionals_at_end(App::get_positionals_at_end7758,299704
+    CLI11_NODISCARD bool get_configurable(App::get_configurable7761,299853
+    CLI11_NODISCARD const std::string &get_group(App::get_group7764,299971
+    CLI11_NODISCARD std::string get_usage(App::get_usage7767,300087
+    CLI11_NODISCARD std::string get_footer(App::get_footer7772,300265
+    CLI11_NODISCARD std::size_t get_require_subcommand_min(App::get_require_subcommand_min7777,300454
+    CLI11_NODISCARD std::size_t get_require_subcommand_max(App::get_require_subcommand_max7780,300604
+    CLI11_NODISCARD std::size_t get_require_option_min(App::get_require_option_min7783,300750
+    CLI11_NODISCARD std::size_t get_require_option_max(App::get_require_option_max7786,300888
+    CLI11_NODISCARD bool get_prefix_command(App::get_prefix_command7789,301022
+    CLI11_NODISCARD bool get_allow_extras(App::get_allow_extras7792,301142
+    CLI11_NODISCARD bool get_required(App::get_required7795,301254
+    CLI11_NODISCARD bool get_disabled(App::get_disabled7798,301358
+    CLI11_NODISCARD bool get_silent(App::get_silent7801,301461
+    CLI11_NODISCARD bool get_allow_non_standard_option_names(App::get_allow_non_standard_option_names7804,301560
+    CLI11_NODISCARD bool get_immediate_callback(App::get_immediate_callback7807,301705
+    CLI11_NODISCARD bool get_disabled_by_default(App::get_disabled_by_default7810,301840
+    CLI11_NODISCARD bool get_enabled_by_default(App::get_enabled_by_default7813,302000
+    CLI11_NODISCARD bool get_validate_positionals(App::get_validate_positionals7815,302160
+    CLI11_NODISCARD bool get_validate_optional_arguments(App::get_validate_optional_arguments7817,302315
+    CLI11_NODISCARD config_extras_mode get_allow_config_extras(App::get_allow_config_extras7820,302461
+    Option *get_help_ptr(App::get_help_ptr7823,302606
+    CLI11_NODISCARD const Option *get_help_ptr(App::get_help_ptr7826,302704
+    CLI11_NODISCARD const Option *get_help_all_ptr(App::get_help_all_ptr7829,302834
+    Option *get_config_ptr(App::get_config_ptr7832,302964
+    CLI11_NODISCARD const Option *get_config_ptr(App::get_config_ptr7835,303070
+    Option *get_version_ptr(App::get_version_ptr7838,303197
+    CLI11_NODISCARD const Option *get_version_ptr(App::get_version_ptr7841,303306
+    App *get_parent(App::get_parent7844,303457
+    CLI11_NODISCARD const App *get_parent(App::get_parent7847,303583
+    CLI11_NODISCARD const std::string &get_name(App::get_name7850,303694
+    CLI11_NODISCARD const std::vector<std::string> &get_aliases(App::get_aliases7853,303812
+    App *clear_aliases(App::clear_aliases7856,303955
+    CLI11_NODISCARD const std::vector<Option *> &parse_order(App::parse_order7871,304509
+class Option_group 8008,310993
+    Option_group(Option_group::Option_group8010,311037
+    using App::add_option;Option_group::App::add_option8020,311476
+    Option *add_option(Option_group::add_option8022,311554
+    void add_options(Option_group::add_options8030,311839
+    template <typename... Args> void add_options(Option_group::add_options8032,311938
+    using App::add_subcommand;Option_group::App::add_subcommand8036,312077
+    App *add_subcommand(Option_group::add_subcommand8038,312177
+inline void deprecate_option(8062,313229
+inline void deprecate_option(8068,313480
+namespace detail 8085,314140
+struct AppFriend detail::AppFriend8087,314235
+    template <typename... Args> static decltype(detail::AppFriend::decltype8091,314340
+    template <typename... Args> static decltype(detail::AppFriend::decltype8096,314571
+    static App *get_fallthrough_parent(detail::AppFriend::get_fallthrough_parent8115,315474
+CLI11_INLINE App::App(8122,315596
+CLI11_NODISCARD CLI11_INLINE char **App::ensure_utf8(App::ensure_utf88156,317239
+CLI11_INLINE App *App::name(App::name8178,317811
+CLI11_INLINE App *App::alias(App::alias8195,318299
+CLI11_INLINE App *App::immediate_callback(App::immediate_callback8213,318938
+CLI11_INLINE App *App::ignore_case(App::ignore_case8225,319354
+CLI11_INLINE App *App::ignore_underscore(App::ignore_underscore8239,319886
+CLI11_INLINE Option *App::add_option(App::add_option8253,320400
+CLI11_INLINE Option *App::set_help_flag(App::set_help_flag8344,324626
+CLI11_INLINE Option *App::set_help_all_flag(App::set_help_all_flag8360,325143
+App::set_version_flag(8377,325714
+App::set_version_flag(8395,326376
+CLI11_INLINE Option *App::_add_flag_internal(App::_add_flag_internal8411,326897
+CLI11_INLINE Option *App::add_flag_callback(App::add_flag_callback8436,328001
+App::add_flag_function(8453,328659
+CLI11_INLINE Option *App::set_config(App::set_config8468,329251
+CLI11_INLINE bool App::remove_option(8497,330304
+CLI11_INLINE App *App::add_subcommand(App::add_subcommand8518,330872
+CLI11_INLINE App *App::add_subcommand(App::add_subcommand8536,331839
+CLI11_INLINE bool App::remove_subcommand(8549,332386
+CLI11_INLINE App *App::get_subcommand(App::get_subcommand8565,332871
+CLI11_NODISCARD CLI11_INLINE App *App::get_subcommand(App::get_subcommand8574,333180
+CLI11_NODISCARD CLI11_INLINE App *App::get_subcommand_no_throw(App::get_subcommand_no_throw8581,333401
+CLI11_NODISCARD CLI11_INLINE App *App::get_subcommand(App::get_subcommand8585,333555
+CLI11_INLINE CLI::App_p App::get_subcommand_ptr(8594,333847
+CLI11_NODISCARD CLI11_INLINE CLI::App_p App::get_subcommand_ptr(8603,334154
+CLI11_NODISCARD CLI11_INLINE CLI::App_p App::get_subcommand_ptr(8610,334402
+CLI11_NODISCARD CLI11_INLINE CLI::App *App::get_option_group(App::get_option_group8619,334698
+CLI11_NODISCARD CLI11_INLINE std::size_t App::count_all(8628,334983
+CLI11_INLINE void App::clear(8642,335382
+CLI11_INLINE void App::parse(8657,335666
+CLI11_INLINE void App::parse(8658,335760
+namespace detail 8660,335858
+CLI11_INLINE const char *maybe_narrow(detail::maybe_narrow8663,335913
+CLI11_INLINE std::string maybe_narrow(detail::maybe_narrow8664,335984
+template <class CharT> CLI11_INLINE void App::parse_char_t(8668,336091
+CLI11_INLINE void App::parse(8683,336626
+CLI11_INLINE void App::parse(8714,337834
+CLI11_INLINE void App::parse(8718,337977
+CLI11_INLINE void App::parse(8737,338497
+CLI11_INLINE void App::parse_from_stream(8756,339029
+CLI11_INLINE int App::exit(8767,339289
+CLI11_INLINE std::vector<const App *> App::get_subcommands(8796,340063
+CLI11_INLINE std::vector<App *> App::get_subcommands(8811,340681
+CLI11_INLINE bool App::remove_excludes(8825,341195
+CLI11_INLINE bool App::remove_excludes(8834,341478
+CLI11_INLINE bool App::remove_needs(8845,341845
+CLI11_INLINE bool App::remove_needs(8854,342113
+CLI11_NODISCARD CLI11_INLINE std::string App::help(8863,342394
+CLI11_NODISCARD CLI11_INLINE std::string App::version(8877,342837
+CLI11_INLINE std::vector<const Option *> App::get_options(8895,343361
+CLI11_INLINE std::vector<Option *> App::get_options(8917,344382
+CLI11_NODISCARD CLI11_INLINE Option *App::get_option_no_throw(App::get_option_no_throw8937,345233
+CLI11_NODISCARD CLI11_INLINE const Option *App::get_option_no_throw(App::get_option_no_throw8955,345763
+CLI11_NODISCARD CLI11_INLINE std::string App::get_display_name(8973,346317
+CLI11_NODISCARD CLI11_INLINE bool App::check_name(8989,346780
+CLI11_NODISCARD CLI11_INLINE std::vector<std::string> App::get_groups(9017,347600
+CLI11_NODISCARD CLI11_INLINE std::vector<std::string> App::remaining(9030,347986
+CLI11_NODISCARD CLI11_INLINE std::vector<std::string> App::remaining_for_passthrough(9056,348982
+CLI11_NODISCARD CLI11_INLINE std::size_t App::remaining_size(9062,349237
+CLI11_INLINE void App::_validate(9076,349759
+CLI11_INLINE void App::_configure(9111,351133
+CLI11_INLINE void App::run_callback(9131,351796
+CLI11_NODISCARD CLI11_INLINE bool App::_valid_subcommand(9158,352759
+CLI11_NODISCARD CLI11_INLINE detail::Classifier App::_recognize(9175,353473
+CLI11_INLINE bool App::_process_config_file(9210,355005
+CLI11_INLINE void App::_process_config_file(9230,355636
+CLI11_INLINE void App::_process_env(9266,357028
+CLI11_INLINE void App::_process_callbacks(9288,357822
+CLI11_INLINE void App::_process_help_flags(9312,358459
+CLI11_INLINE void App::_process_requirements(9334,359309
+CLI11_INLINE void App::_process(9462,363931
+CLI11_INLINE void App::_process_extras(9485,364748
+CLI11_INLINE void App::_process_extras(9499,365107
+CLI11_INLINE void App::increment_parsed(9514,365525
+CLI11_INLINE void App::_parse(9522,365703
+CLI11_INLINE void App::_parse(9550,366482
+CLI11_INLINE void App::_parse_stream(9566,366960
+CLI11_INLINE void App::_parse_config(9577,367280
+CLI11_INLINE bool App::_parse_single_config(9584,367555
+CLI11_INLINE bool App::_parse_single(9732,373140
+CLI11_NODISCARD CLI11_INLINE std::size_t App::_count_remaining_positionals(9774,374647
+CLI11_NODISCARD CLI11_INLINE bool App::_has_remaining_positionals(9786,375167
+CLI11_INLINE bool App::_parse_positional(9796,375454
+App::_find_subcommand(9914,379907
+CLI11_INLINE bool App::_parse_subcommand(9932,380495
+App::_parse_arg(9972,381825
+CLI11_INLINE void App::_trigger_pre_parse(10206,391614
+CLI11_INLINE App *App::_get_fallthrough_parent(App::_get_fallthrough_parent10224,392141
+CLI11_NODISCARD CLI11_INLINE const std::string &App::_compare_subcommand_names(App::_compare_subcommand_names10235,392512
+CLI11_INLINE void App::_move_to_missing(10286,394404
+CLI11_INLINE void App::_move_option(10302,395003
+CLI11_INLINE void TriggerOn(10341,396406
+CLI11_INLINE void TriggerOn(10347,396667
+CLI11_INLINE void TriggerOff(10360,397041
+CLI11_INLINE void TriggerOff(10366,397298
+CLI11_INLINE void deprecate_option(10379,397668
+CLI11_INLINE void retire_option(10393,398362
+CLI11_INLINE void retire_option(10420,399677
+CLI11_INLINE void retire_option(10422,399763
+CLI11_INLINE void retire_option(10445,400665
+namespace FailureMessage 10447,400778
+CLI11_INLINE std::string simple(FailureMessage::simple10449,400806
+CLI11_INLINE std::string help(10467,401366
+namespace detail 10478,401603
+static constexpr auto multiline_literal_quote 10504,402626
+static constexpr auto multiline_string_quote 10505,402684
+CLI11_INLINE std::string ini_join(10574,405279
+generate_parents(10603,406294
+checkParentSegments(10628,407192
+CLI11_INLINE bool hasMLString(10677,409204
+                                 bool fullSearch) -> decltype(10689,409700
+inline std::vector<ConfigItem> ConfigBase::from_config(10707,410143
+CLI11_INLINE std::string &clean_name_string(clean_name_string10962,421561
+ConfigBase::to_config(10980,422235
+Formatter::make_group(11153,429383
+CLI11_INLINE std::string Formatter::make_positionals(11164,429665
+CLI11_INLINE std::string Formatter::make_groups(11174,429999
+CLI11_INLINE std::string Formatter::make_description(11199,431101
+CLI11_INLINE std::string Formatter::make_usage(11224,432152
+CLI11_INLINE std::string Formatter::make_footer(11275,434053
+CLI11_INLINE std::string Formatter::make_help(11283,434268
+CLI11_INLINE std::string Formatter::make_subcommands(11307,435224
+CLI11_INLINE std::string Formatter::make_subcommand(11349,436897
+CLI11_INLINE std::string Formatter::make_expanded(11360,437369
+CLI11_INLINE std::string Formatter::make_option(11380,438096
+CLI11_INLINE std::string Formatter::make_option_name(11470,442049
+CLI11_INLINE std::string Formatter::make_option_opts(11477,442257
+CLI11_INLINE std::string Formatter::make_option_desc(11512,443600
+CLI11_INLINE std::string Formatter::make_option_usage(11514,443714
+
+includes/errors.hpp,711
+namespace Kudo::Error::Semantic 8,96
+    using Kudo::Language::Span;Kudo::Error::Semantic::Kudo::Language::Span9,130
+    struct UnknownType Kudo::Error::Semantic::UnknownType11,167
+	Span span;Kudo::Error::Semantic::UnknownType::span12,192
+	UnknownType(Kudo::Error::Semantic::UnknownType::UnknownType13,204
+    struct TypeMisMatch Kudo::Error::Semantic::TypeMisMatch16,245
+	Span span;Kudo::Error::Semantic::TypeMisMatch::span17,271
+	std::string expected;Kudo::Error::Semantic::TypeMisMatch::expected18,283
+	std::string got;Kudo::Error::Semantic::TypeMisMatch::got19,306
+	TypeMisMatch(Kudo::Error::Semantic::TypeMisMatch::TypeMisMatch20,324
+    using Error Kudo::Error::Semantic::Error23,425
+
+includes/defines.hpp,459
+#define uniq(7,70
+#define shr(8,111
+#define mk_u(9,152
+#define mk_s(10,212
+#define mv(11,272
+#define as(12,307
+template<typename T,14,360
+bool is(15,405
+namespace Kudo::Language 19,483
+typedef std::vector<Token> Tokens;Kudo::Language::Tokens32,672
+using ExprPtr Kudo::Language::ExprPtr33,707
+using StmtPtr Kudo::Language::StmtPtr34,746
+using ExprVariant Kudo::Language::ExprVariant35,785
+using StmtVariant Kudo::Language::StmtVariant36,877
+
+includes/lexer.hpp,304
+namespace Kudo 7,91
+    namespace Language Kudo::Language8,108
+	typedef std::vector<Token> Tokens;Kudo::Language::Tokens10,135
+	struct Lexer Kudo::Language::Lexer12,173
+	    std::string filename;Kudo::Language::Lexer::filename13,189
+	    std::string source;Kudo::Language::Lexer::source14,216
+
+includes/token.hpp,2352
+namespace Kudo::Language 5,57
+enum class TokenKind Kudo::Language::TokenKind7,85
+  NAME,Kudo::Language::TokenKind::NAME8,108
+  KEYWORD,Kudo::Language::TokenKind::KEYWORD9,116
+  NUMBER,Kudo::Language::TokenKind::NUMBER10,127
+  STRING,Kudo::Language::TokenKind::STRING11,137
+  CSTRING,Kudo::Language::TokenKind::CSTRING12,147
+  OPEN_PAREN,Kudo::Language::TokenKind::OPEN_PAREN15,179
+  CLOSE_PAREN,Kudo::Language::TokenKind::CLOSE_PAREN16,193
+  OPEN_BRACKET,Kudo::Language::TokenKind::OPEN_BRACKET17,208
+  CLOSE_BRACKET,Kudo::Language::TokenKind::CLOSE_BRACKET18,224
+  OPEN_BRACE,Kudo::Language::TokenKind::OPEN_BRACE19,241
+  CLOSE_BRACE,Kudo::Language::TokenKind::CLOSE_BRACE20,255
+  COMMA,Kudo::Language::TokenKind::COMMA21,270
+  COLON,Kudo::Language::TokenKind::COLON22,279
+  SEMI,Kudo::Language::TokenKind::SEMI23,288
+  DOT,Kudo::Language::TokenKind::DOT24,296
+  EQ,Kudo::Language::TokenKind::EQ26,318
+  BANG,Kudo::Language::TokenKind::BANG27,332
+  EQEQ,Kudo::Language::TokenKind::EQEQ28,346
+  NEQ,Kudo::Language::TokenKind::NEQ29,361
+  ADD,Kudo::Language::TokenKind::ADD30,376
+  SUB,Kudo::Language::TokenKind::SUB31,390
+  MUL,Kudo::Language::TokenKind::MUL32,404
+  DIV,Kudo::Language::TokenKind::DIV33,418
+  SHR,Kudo::Language::TokenKind::SHR34,432
+  SHL,Kudo::Language::TokenKind::SHL35,447
+  ADDEQ,Kudo::Language::TokenKind::ADDEQ36,462
+  SUBEQ,Kudo::Language::TokenKind::SUBEQ37,477
+  MULEQ,Kudo::Language::TokenKind::MULEQ38,492
+  DIVEQ,Kudo::Language::TokenKind::DIVEQ39,507
+  INC,Kudo::Language::TokenKind::INC40,522
+  DEC,Kudo::Language::TokenKind::DEC41,537
+  OR,Kudo::Language::TokenKind::OR42,552
+  AND,Kudo::Language::TokenKind::AND43,567
+  BAND,Kudo::Language::TokenKind::BAND44,582
+  BOR,Kudo::Language::TokenKind::BOR45,596
+  DOLA,Kudo::Language::TokenKind::DOLA46,610
+  AT,Kudo::Language::TokenKind::AT47,624
+  TEOF,Kudo::Language::TokenKind::TEOF48,638
+static std::string tokenkind_tostr(50,649
+struct Span 58,1059
+  int line;Span::line59,1073
+  int column;Span::column60,1085
+  int offset;Span::offset61,1099
+  std::string filename;Span::filename62,1113
+  Span(Span::Span64,1138
+struct Token 68,1279
+  TokenKind kind;Token::kind69,1294
+  std::string data;Token::data70,1312
+  Span span;Token::span71,1332
+  Token(Token::Token72,1345
+
+includes/types.hpp,2192
+namespace Kudo::CodeGen::Types 6,63
+    enum class BaseType Kudo::CodeGen::Types::BaseType7,96
+	I8,Kudo::CodeGen::Types::BaseType::I88,122
+	I8, I16,Kudo::CodeGen::Types::BaseType::I168,122
+	I8, I16, I32,Kudo::CodeGen::Types::BaseType::I328,122
+	I8, I16, I32, I64,Kudo::CodeGen::Types::BaseType::I648,122
+	I8, I16, I32, I64, U8,Kudo::CodeGen::Types::BaseType::U88,122
+	I8, I16, I32, I64, U8, U16,Kudo::CodeGen::Types::BaseType::U168,122
+	I8, I16, I32, I64, U8, U16, U32,Kudo::CodeGen::Types::BaseType::U328,122
+	I8, I16, I32, I64, U8, U16, U32, U64,Kudo::CodeGen::Types::BaseType::U648,122
+	I8, I16, I32, I64, U8, U16, U32, U64, Byte,Kudo::CodeGen::Types::BaseType::Byte8,122
+	I8, I16, I32, I64, U8, U16, U32, U64, Byte, Char,Kudo::CodeGen::Types::BaseType::Char8,122
+	I8, I16, I32, I64, U8, U16, U32, U64, Byte, Char, String,Kudo::CodeGen::Types::BaseType::String8,122
+	I8, I16, I32, I64, U8, U16, U32, U64, Byte, Char, String, CString,Kudo::CodeGen::Types::BaseType::CString8,122
+	I8, I16, I32, I64, U8, U16, U32, U64, Byte, Char, String, CString, Int,Kudo::CodeGen::Types::BaseType::Int8,122
+	I8, I16, I32, I64, U8, U16, U32, U64, Byte, Char, String, CString, Int, Pointer,Kudo::CodeGen::Types::BaseType::Pointer8,122
+	I8, I16, I32, I64, U8, U16, U32, U64, Byte, Char, String, CString, Int, Pointer, Ref,Kudo::CodeGen::Types::BaseType::Ref8,122
+	I8, I16, I32, I64, U8, U16, U32, U64, Byte, Char, String, CString, Int, Pointer, Ref, CustomKudo::CodeGen::Types::BaseType::Custom8,122
+    struct Type Kudo::CodeGen::Types::Type11,228
+	BaseType type;Kudo::CodeGen::Types::Type::type12,246
+	std::string repr;Kudo::CodeGen::Types::Type::repr13,262
+	Type(Kudo::CodeGen::Types::Type::Type15,282
+	Type(Kudo::CodeGen::Types::Type::Type16,322
+	static shr(Kudo::CodeGen::Types::Type::shr18,382
+	static shr(Kudo::CodeGen::Types::Type::shr22,454
+    struct TypeMap Kudo::CodeGen::Types::TypeMap27,561
+	std::unordered_map<Kudo::CodeGen::Types::TypeMap::std::unordered_map28,582
+	void add_type(Kudo::CodeGen::Types::TypeMap::add_type29,633
+	bool has_type(Kudo::CodeGen::Types::TypeMap::has_type33,717
+	shr(Kudo::CodeGen::Types::TypeMap::shr37,792

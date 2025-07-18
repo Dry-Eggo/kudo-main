@@ -58,15 +58,28 @@ namespace Kudo {
 		    advance();
 		    continue;
 		}
+
+		if (now() == 'c' && peek() == '"') {
+		    advance(); advance();
+		    std::string buf;
+		    int sc = column;
+		    while (now() != EOF && now() != '"') {
+			buf += advance();
+		    }
+		    advance();
+		    tokens.push_back(Token(TokenKind::CSTRING, buf, Span(filename.c_str(), line, sc, column - 1)));
+		}
+		
 		if (isalpha(now()) || now() == '_') {
 		    std::string buf;
 		    int sc = column;
 		    while (now() != EOF && (isalnum(now()) || now() == '_')) {
 			buf += advance();
 		    }
+		    
 		    // TODO: add all keywords
 		    if (buf == "end" || buf == "func" || buf == "import" || buf == "if" || buf == "int" || buf == "str" ||
-		    buf == "let" || buf == "if" || buf == "elif" || buf == "else" || buf == "loop" || buf == "false" || buf == "true" ) {
+		    buf == "var" || buf == "if" || buf == "elif" || buf == "else" || buf == "loop" || buf == "false" || buf == "true" ||  buf == "cstr") {
 			tokens.push_back(Token(TokenKind::KEYWORD, buf,
                         Span(filename.c_str(), line, sc, column - 1)));
 			continue;
@@ -134,7 +147,7 @@ namespace Kudo {
 		    break;
 		case '*':
 		    advance();
-		    tokens.push_back(Token(TokenKind::SUB, "*",
+		    tokens.push_back(Token(TokenKind::MUL, "*",
                     Span(filename.c_str(), line, sc, column - 1)));
 		    break;
 		case '/':

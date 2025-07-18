@@ -9,6 +9,8 @@ enum class TokenKind {
   KEYWORD,
   NUMBER,
   STRING,
+  CSTRING,
+  
   // punctuations
   OPEN_PAREN,
   CLOSE_PAREN,
@@ -60,7 +62,12 @@ struct Span {
   std::string filename;
 
   Span(std::string filename, int line, int column, int offset)
-      : filename(filename), line(line), column(column), offset(offset) {}
+  : filename(filename), line(line), column(column), offset(offset) {}
+
+  Span merge(Span s) {
+      offset = s.offset;
+      return *this;
+  }
 };
 
 struct Token {

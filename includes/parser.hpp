@@ -4,6 +4,11 @@
 #include <lexer.hpp>
 #include <nodes.hpp>
 #include <syntax_error.hpp>
+#include <types.hpp>
+
+
+using Kudo::CodeGen::Types::Type;
+using Kudo::CodeGen::Types::BaseType;
 
 namespace Kudo {
 namespace Language {
@@ -26,7 +31,7 @@ struct Parser {
 
   bool match(TokenKind kind);
   void expect(TokenKind kind);
-  Type parse_type();
+  shr(Type) parse_type();
   StmtPtr parse_function();
   StmtPtr parse_body();
   StmtPtr parse_stmt();
@@ -36,6 +41,7 @@ struct Parser {
   ExprPtr parse_equality();
   ExprPtr parse_additive();
   ExprPtr parse_term();
+  ExprPtr parse_postfix();
   ExprPtr parse_atom();
 };
 } // namespace Language
