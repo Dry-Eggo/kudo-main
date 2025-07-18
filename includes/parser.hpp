@@ -30,9 +30,11 @@ struct Parser {
   void advance();
 
   bool match(TokenKind kind);
+  bool match(std::string kw);
   void expect(TokenKind kind);
   shr(Type) parse_type();
   StmtPtr parse_function();
+  StmtPtr parse_extern();
   StmtPtr parse_body();
   StmtPtr parse_stmt();
   ExprPtr parse_expr();

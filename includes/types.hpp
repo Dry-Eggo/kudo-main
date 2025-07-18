@@ -5,7 +5,8 @@
 
 namespace Kudo::CodeGen::Types {
     enum class BaseType {
-	I8, I16, I32, I64, U8, U16, U32, U64, Byte, Char, String, CString, Int, Pointer, Ref, Custom
+	I8, I16, I32, I64, U8, U16, U32, U64, Byte, Char, String, CString, Int, Pointer, Ref, Custom,
+	Void,
     };
     
     struct Type {
@@ -30,7 +31,8 @@ namespace Kudo::CodeGen::Types {
 	TypeMap() {	    
 	    types = {
 		{"int",  Types::Type::new_type(Types::BaseType::Int, "int")},
-		{"cstr", Types::Type::new_type(Types::BaseType::CString, "char*")}
+		{"cstr", Types::Type::new_type(Types::BaseType::CString, "const char*")},
+		{"void",  Types::Type::new_type(Types::BaseType::Void, "void")}
 	    };
 	}
 	

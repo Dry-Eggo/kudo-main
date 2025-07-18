@@ -22,6 +22,7 @@ namespace Kudo {
 	    char advance();
 	    char before();
 	    char peek();
+	    char look_ahead(int n);
 	    Tokens parse();
 	};
     } // Language

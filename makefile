@@ -13,7 +13,7 @@ all: $(COMPILER)
 
 $(COMPILER): $(OBJ)
 	@mkdir -p $(OUTDIR)
-	clang++ -o $@ $^ $(FLAGS)
+	clang++ -o $@ $^ $(FLAGS) -g
 
 $(BINDIR)/%.o: $(SRCDIR)/%.cpp
-	clang++ -c -o $@ $< $(FLAGS)
+	clang++ -c -o $@ $< $(FLAGS) -g

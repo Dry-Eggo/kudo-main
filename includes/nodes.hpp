@@ -18,7 +18,10 @@ namespace Kudo {
 
 	struct Param {
 	    std::string name;
-	    Param(std::string n) : name(n) {}
+	    shr(Type)   type;
+	    Span        span;
+	    
+	    Param(std::string n, shr(Type) t, Span s) : name(n), type(mv(t)), span(s) {}
 	};
 
 	using Params = std::vector<Param>;
@@ -29,13 +32,28 @@ namespace Kudo {
 	    Body(Statements s) : stmts(mv(s)) {}
 	};
 
+	struct ExternDef {
+	    enum ExternType { Function, Var, Struct } kind;
+	    StmtPtr stmt;
+	    ExternDef(ExternType t, StmtPtr s): stmt(mv(s)), kind(t) {}
+	};
+	
 	struct FunctionDef {	    
 	    std::string name;
 	    Params params;
 	    StmtPtr body;
-	    FunctionDef(std::string name, Params params, StmtPtr body)
-	    : name(std::move(name)), params(std::move(params)),
-            body(std::move(body)) {}
+	    shr(Type) return_type;
+	    Span    span; /* span covering the name of this function */
+	    bool    is_definition;
+	    bool    is_variadic;
+	    
+	    FunctionDef(std::string name, Params params, StmtPtr body, shr(Type) rt, Span s, bool i)
+	    : name(std::move(name)), params(std::move(params)), is_variadic(i),
+            body(std::move(body)), return_type(mv(rt)), span(s), is_definition(false) {}
+
+	    FunctionDef(std::string name, Params params, shr(Type) rt, Span s, bool v)
+	    : name(std::move(name)), params(std::move(params)), body(nullptr), is_variadic(v),
+            return_type(mv(rt)), span(s), is_definition(true) {}
 	};
 
 	struct FunctionCall {

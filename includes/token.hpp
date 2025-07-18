@@ -45,6 +45,7 @@ enum class TokenKind {
   BOR,   // |
   DOLA,  // $
   AT,    // @
+  SPREAD, // ...
   TEOF,
 };
 static std::string tokenkind_tostr(TokenKind k) {

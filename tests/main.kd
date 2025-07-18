@@ -1,5 +1,12 @@
 
-func main() {
+extern func printf(msg: cstr, ...): int;
+
+func foo(a: int) {
+     printf(c"In Foo: %d\n", a);
+}
+
+func main(): int {
      var agent : int = 20;
      printf(c"agent: %d\n", agent);
+     foo(40);
 }

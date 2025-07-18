@@ -27,5 +27,25 @@ namespace Kudo::Semantic {
 	Redefinition(Span f, Span s, std::string sn): first(f), second(s), symbol_name(sn) {}
     };
 
-    typedef std::variant<UnknownType, TypeMisMatch, Redefinition> SemanticError;
+    struct Undeclared {
+	Span span;
+	std::string symbol_name;
+	Undeclared(Span s, std::string sn): span(s), symbol_name(sn) {}
+    };
+
+    struct UndeclaredFunction {
+	Span span;
+	std::string symbol_name;
+	UndeclaredFunction(Span s, std::string sn): span(s), symbol_name(sn) {}
+    };
+    
+    struct InvalidParameterCount {
+	Span callee;
+	Span definition;
+	int  expected;
+	int  got;
+	InvalidParameterCount(Span c, Span d, int e, int g): callee(c), definition(d), expected(e), got(g) {}
+    };
+    
+    typedef std::variant<UndeclaredFunction, UnknownType, TypeMisMatch, Redefinition, Undeclared, InvalidParameterCount> SemanticError;
 }

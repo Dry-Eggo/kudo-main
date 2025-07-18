@@ -33,6 +33,9 @@ Token Parser::before() {
 }
 
 bool Parser::match(TokenKind kind) { return (now().kind == kind); }
+bool Parser::match(std::string kw) {
+    return (now().kind == TokenKind::KEYWORD && now().data == kw);
+}
 
 void Parser::expect(TokenKind kind) {
     if (match(kind)) {
@@ -112,6 +115,10 @@ void Parser::parse() {
 		auto func = parse_function();
 		program.push_back(mv(func));
 	    }
+	    else if (now().data == "extern") {
+		auto extrn = parse_extern();
+		program.push_back(mv(extrn));
+	    }
 	} break;
     default:
 	auto stmt = parse_stmt();
@@ -121,27 +128,77 @@ void Parser::parse() {
 error.flush();
 }
 
+StmtPtr Parser::parse_extern() {
+    Span start = now().span;
+    advance();
+    ExternDef::ExternType t = ExternDef::ExternType::Function;
+    if (match("func")) {
+	auto func = parse_function();
+	auto span = func->span;
+	return mk_u(Stmt, mv(mk_u(ExternDef, t, mv(func))), span);
+    }
+    error.report(Diagnostic(now().span, "Invalid external storage candidate", ""), true);
+    exit(1); /* shouldn't reach here */
+}
+
 StmtPtr Parser::parse_function() {
     Span start = now().span;
     advance();
     std::string function_name;
-    Params params;
+    Span name_span = now().span;
     if (match(TokenKind::NAME)) {
 	function_name = now().data;
 	advance();
     }
 
     expect(TokenKind::OPEN_PAREN);
-    expect(TokenKind::CLOSE_PAREN);
-    
-    auto expr = parse_expr();
-    auto expr_span = expr->span;
-    
-    auto body_expr = mk_u(ExprStmt, mv(expr));
-    auto body_stmt = mk_u(Stmt, mv(body_expr), expr_span);
+    Params params;
+    bool   is_variadic = false;
+    while (!match(TokenKind::CLOSE_PAREN)) {
+	Span pstart = now().span;
+	if (match(TokenKind::SPREAD)) {
+	    advance();
+	    is_variadic = true;
+	    break;
+	}
+	
+	Token tok = now();
+	if (tok.kind != TokenKind::NAME) {
+	    error.report(Diagnostic(now().span, "Expected an identifier", ""), true);
+	}
+	advance();
+	expect(TokenKind::COLON);
+	auto param_type = parse_type();
+	Span pend = now().span;
+	params.push_back(Param(tok.data, param_type, pstart.merge(pend)));
 
-    Span span = start;
-    auto function = mk_u(FunctionDef, function_name, params, mv(body_stmt));
+	if (match(TokenKind::COMMA)) {
+	    advance();
+	}
+    }
+    expect(TokenKind::CLOSE_PAREN);
+
+    shr(Type) ret_type = Type::new_type(BaseType::Void);
+    if (match(TokenKind::COLON)) {
+	expect(TokenKind::COLON);
+	ret_type = parse_type();
+    }
+
+    uniq(FunctionDef) function = nullptr;
+    if (!match(TokenKind::SEMI)) {
+	auto expr = parse_expr();
+	auto expr_span = expr->span;
+	
+	auto body_expr = mk_u(ExprStmt, mv(expr));
+	auto body_stmt = mk_u(Stmt, mv(body_expr), expr_span);
+	function = mk_u(FunctionDef, function_name, params, mv(body_stmt), ret_type, name_span, is_variadic);
+    } else {
+	function = mk_u(FunctionDef, function_name, params, ret_type, name_span, is_variadic);
+	expect(TokenKind::SEMI);
+    }
+    
+    Span end = now().span;
+    Span span = start.merge(end);
     return mk_u(Stmt, mv(function), span);
 }
 

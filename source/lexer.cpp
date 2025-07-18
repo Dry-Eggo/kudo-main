@@ -27,6 +27,12 @@ namespace Kudo {
 	    }
 	    return source.at(pos);
 	}
+	char Lexer::look_ahead(int n = 0) {
+	    if (pos + n >= source.size()) {
+		return EOF;
+	    }
+	    return source.at(pos + n);
+	}
 	char Lexer::peek() {
 	    if (pos + 1 >= source.size()) {
 		return EOF;
@@ -78,7 +84,7 @@ namespace Kudo {
 		    }
 		    
 		    // TODO: add all keywords
-		    if (buf == "end" || buf == "func" || buf == "import" || buf == "if" || buf == "int" || buf == "str" ||
+		    if (buf == "end" || buf == "func" || buf == "import" || buf == "if" || buf == "int" || buf == "str" || buf == "extern" ||
 		    buf == "var" || buf == "if" || buf == "elif" || buf == "else" || buf == "loop" || buf == "false" || buf == "true" ||  buf == "cstr") {
 			tokens.push_back(Token(TokenKind::KEYWORD, buf,
                         Span(filename.c_str(), line, sc, column - 1)));
@@ -234,6 +240,14 @@ namespace Kudo {
 		    advance();
 		    tokens.push_back(Token(TokenKind::SEMI, ";",
                     Span(filename.c_str(), line, sc, column - 1)));
+		    break;
+		case '.':
+		    if (look_ahead(1) == '.' && look_ahead(2) == '.') {
+			advance();
+			advance();
+			advance();
+			tokens.push_back(Token(TokenKind::SPREAD, "...", Span(filename.c_str(), line, sc, column - 1)));
+		    }
 		    break;
 		default:
 		    std::stringstream s;
