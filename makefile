@@ -1,21 +1,19 @@
-BINDIR:= out
-SRCDIR:= source
-INCDIR:= includes
-SRC:= $(wildcard $(SRCDIR)/*.c)
-CPPSRC:= $(wildcard $(SRCDIR)/khm/*.cpp)
-CPPOBJ:= $(patsubst $(SRCDIR)/khm/%.cpp, $(BINDIR)/%.o, $(CPPSRC))
-OBJ:= $(patsubst $(SRCDIR)/%.c, $(BINDIR)/%.o, $(SRC))
-FLAGS:= -I$(INCDIR) -I./source/khm
+SRCDIR := source
+BINDIR := bin
+OUTDIR := $(BINDIR)/toolchain
+PROJECT := kudoc
+COMPILER := $(OUTDIR)/$(PROJECT)
+SRCFILES := $(wildcard $(SRCDIR)/*.cpp)
+OBJ := $(patsubst $(SRCDIR)/%.cpp, $(BINDIR)/%.o, $(SRCFILES))
+INCLUDES := includes
+HEADERS  := $(wildcard $(INCLUDES)/*.hpp)
+FLAGS := -std=c++20 -I$(INCLUDES)
 
-TARGET:= $(BINDIR)/kudoc
+all: $(COMPILER)
 
-all: $(TARGET)
+$(COMPILER): $(OBJ)
+	@mkdir -p $(OUTDIR)
+	$(CXX) -o $@ $^ $(FLAGS)
 
-$(TARGET): $(OBJ) $(CPPOBJ)
-	clang++ -o $@ $^ $(FLAGS)
-
-$(BINDIR)/%.o: $(SRCDIR)/%.c
-	clang -c -o $@ $< $(FLAGS)
-
-$(BINDIR)/%.o: $(SRCDIR)/khm/%.cpp
-	clang++ -c -o $@ $< $(FLAGS)
+$(BINDIR)/%.o: $(SRCDIR)/%.cpp
+	$(CXX) -c -o $@ $< $(FLAGS)

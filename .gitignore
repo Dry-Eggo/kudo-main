@@ -1,2 +1,5 @@
-*.o
+# emacs crap
 *~
+
+# object files
+*.o

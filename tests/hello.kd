@@ -1,5 +1,0 @@
-
-func main() {
-     var age : cstr = 10;
-     var msg : cstr = c"Hello";
-}

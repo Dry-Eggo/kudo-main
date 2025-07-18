@@ -1,3 +1,2 @@
--I./includes 
--I./source/khm
--xc
+-I./includes
+-std=c++20
