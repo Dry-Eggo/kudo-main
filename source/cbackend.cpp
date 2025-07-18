@@ -178,7 +178,7 @@ void CBackend::format_typemismatch(TypeMisMatch err) {
     printf("\n");
 }
 
-void format_redefinition(Semantic::Redefinition err) {
+void CBackend::format_redefinition(Redefinition err) {
     auto second_line = source.at(err.second.line-1);
     printf("Error: %s:%d:%d-%d: Redefinition of '%s'\n",
     err.second.filename.c_str(), err.second.line, err.second.column, err.second.offset, err.symbol_name.c_str());
@@ -188,7 +188,7 @@ void format_redefinition(Semantic::Redefinition err) {
 
     int fc = first_char(second_line);
     printf("%s", std::string(fc, ' ').c_str());
-    for (int i = fc; i < line.size(); i++) {
+    for (int i = fc; i < second_line.size(); i++) {
 	if (i >= err.second.column) {
 	    while(i <= err.second.offset) {
 		printf("^");
@@ -201,16 +201,16 @@ void format_redefinition(Semantic::Redefinition err) {
     
     auto first_line = source.at(err.first.line-1);
     printf("-----> %s:%d:%d-%d: First Defined Here\n",
-    err.first.filename.c_str(), err.first.line, err.first.column, err.first.offset, err.symbol_name.c_str());
+    err.first.filename.c_str(), err.first.line, err.first.column, err.first.offset);
     printf(" %1c |\n", ' ');
-    printf(" %1d |%s\n", err.first.line, line.c_str());
+    printf(" %1d |%s\n", err.first.line, first_line.c_str());
     printf(" %1c |", ' ');
 
-    int fc = first_char(first_line);
+    fc = first_char(first_line);
     printf("%s", std::string(fc, ' ').c_str());
-    for (int i = fc; i < line.size(); i++) {
-	if (i >= err.span.column) {
-	    while(i <= err.span.offset) {
+    for (int i = fc; i < first_line.size(); i++) {
+	if (i >= err.first.column) {
+	    while(i <= err.first.offset) {
 		printf("^");
 		i++;
 	    }

@@ -24,7 +24,7 @@ namespace Kudo::Semantic {
 	Span first;
 	Span second;
 	std::string symbol_name;
-	Redefinition(Span f, Span s, std::string s): first(f), second(s), symbol_name(s) {}
+	Redefinition(Span f, Span s, std::string sn): first(f), second(s), symbol_name(sn) {}
     };
 
     typedef std::variant<UnknownType, TypeMisMatch, Redefinition> SemanticError;
