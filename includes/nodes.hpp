@@ -49,11 +49,11 @@ namespace Kudo {
 	    
 	    FunctionDef(std::string name, Params params, StmtPtr body, shr(Type) rt, Span s, bool i)
 	    : name(std::move(name)), params(std::move(params)), is_variadic(i),
-            body(std::move(body)), return_type(mv(rt)), span(s), is_definition(false) {}
+            body(std::move(body)), return_type(mv(rt)), span(s), is_definition(true) {}
 
 	    FunctionDef(std::string name, Params params, shr(Type) rt, Span s, bool v)
 	    : name(std::move(name)), params(std::move(params)), body(nullptr), is_variadic(v),
-            return_type(mv(rt)), span(s), is_definition(true) {}
+            return_type(mv(rt)), span(s), is_definition(false) {}
 	};
 
 	struct FunctionCall {

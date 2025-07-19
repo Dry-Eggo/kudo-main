@@ -102,7 +102,7 @@ CResult CBackend::gen_function(FunctionDef *func) {
     std::string code;
     std::string type_str = type_tostr(func->return_type.get());
     code += std::format("\n{} {} ({})\n", type_str, func->name, spread_params(func->params, func->is_variadic));
-    if (!func->is_definition) {
+    if (func->is_definition) {
 	code += std::format("{{\n");
 	new_ctx();
 	for (auto param: func->params) {
