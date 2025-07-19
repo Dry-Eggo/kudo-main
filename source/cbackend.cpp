@@ -194,8 +194,13 @@ CResult CBackend::gen_expr(Expr* expr) {
 	auto lhs_code = gen_expr(binop->lhs.get());
 	auto rhs_code = gen_expr(binop->rhs.get());
 
-	if (!type_match(lhs_code.type, rhs_code.type())) {
-	}
+	// if (!type_match(lhs_code.type, rhs_code.type)) {
+	//     // todo: error
+	//     goto recover;
+	// }
+
+	if (op == BinaryOp::BinOp::Add) code = format("({}) + ({})", lhs_code.code, rhs_code.code);
+	type = types.get_type("int");
 	
     }
     else if (is<uniq(FunctionCall)>(expr->data)) {
