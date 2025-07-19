@@ -6,7 +6,7 @@ func foo(a: int) {
 }
 
 func main(): int {
-     var agent : int = 20 + 2;
+     var agent : int = 20 - 2 - 2;
      printf(c"agent: %d\n", agent);
      foo(40);
 }

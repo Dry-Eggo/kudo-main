@@ -3,7 +3,7 @@ extern int printf(const char *msg, ...);
 void foo(int a) { printf("In Foo: %d\n", a); }
 
 int main() {
-  int agent = (20) + (2);
+  int agent = (20) - ((2) - (2));
   printf("agent: %d\n", agent);
   foo(40);
 }

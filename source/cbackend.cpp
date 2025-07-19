@@ -200,6 +200,7 @@ CResult CBackend::gen_expr(Expr* expr) {
 	// }
 
 	if (op == BinaryOp::BinOp::Add) code = format("({}) + ({})", lhs_code.code, rhs_code.code);
+	else if (op == BinaryOp::BinOp::Sub) code = format("({}) - ({})", lhs_code.code, rhs_code.code);
 	type = types.get_type("int");
 	
     }
