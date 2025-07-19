@@ -220,7 +220,16 @@ ExprPtr Parser::parse_equality() {
 }
 
 ExprPtr Parser::parse_additive() {
+    Span start = now().span;
     auto lhs = parse_term();
+    while (match(TokenKind::ADD) || match(TokenKind::SUB)) {
+	auto op = (now().kind == TokenKind::ADD) ? BinaryOp::BinOp::Add : BinaryOp::BinOp::Sub;
+	advance();
+
+	auto rhs = parse_expr();
+	Span end = now().span;
+	lhs = mk_u(Expr, mv(mk_u(BinaryOp, op, mv(lhs), mv(rhs))), start.merge(end));
+    }
     return lhs;
 }
 

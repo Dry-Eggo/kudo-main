@@ -31,11 +31,13 @@ struct ExprStmt;
 struct VariableDecl;
 struct FunctionDef;
 struct ExternDef;
+struct BinaryOp;
+struct UnaryOp;
 
 typedef std::vector<Token> Tokens;
 using ExprPtr = std::unique_ptr<Expr>;
 using StmtPtr = std::unique_ptr<Stmt>;
-using ExprVariant = std::variant<uniq(Integer), uniq(StringN), uniq(Body), uniq(CStringN), uniq(FunctionCall), uniq(IdentN)>;
+using ExprVariant = std::variant<uniq(Integer), uniq(StringN), uniq(Body), uniq(CStringN), uniq(FunctionCall), uniq(IdentN), uniq(BinaryOp), uniq(UnaryOp)>;
 using StmtVariant =
     std::variant<uniq(FunctionDef), uniq(VariableDecl), uniq(ExprStmt), uniq(ExternDef)>;
 } // namespace Kudo::Language

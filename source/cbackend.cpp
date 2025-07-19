@@ -19,37 +19,6 @@ struct CResult {
     : type(t), code(mv(c)), preamble(mv(p)) {}
 };
 
-
-enum SymbolKind {
-    Function,
-    Variable,
-    Alias,
-};
-
-struct VariableMeta {
-    std::string name;
-    shr(Type)   type;
-    std::string mangled_name;
-    Span declaration; // Declaration Location
-    SymbolKind  symtype;
-    
-    VariableMeta(std::string n, shr(Type) t, Span d, SymbolKind k)
-    : name(mv(n)), type(t), mangled_name(name), declaration(d), symtype(k) {}
-};
-
-struct FunctionMeta {
-    std::string name;
-    std::string mangled_name;
-
-    shr(Type)   return_type;
-    Span        declaration;
-    Params      params;
-    bool        variadic;
-    
-    FunctionMeta(std::string n, shr(Type) t, Span s, Params p, bool v = false)
-    : name(mv(n)), mangled_name(mv(n)), return_type(t), declaration(s), params(p), variadic(v) {}
-};
-
 void CBackend::parse() {
 
     const char* header_path = getenv("KUDO_HEADER");
@@ -216,6 +185,18 @@ CResult CBackend::gen_expr(Expr* expr) {
 	    add_error(Undeclared(expr->span, ident->value));
 	}
 	code = ident->value;
+    }
+    else if (is<uniq(BinaryOp)>(expr->data)) {
+
+	auto binop = as(uniq(BinaryOp), expr);
+	auto op = binop->op;
+
+	auto lhs_code = gen_expr(binop->lhs.get());
+	auto rhs_code = gen_expr(binop->rhs.get());
+
+	if (!type_match(lhs_code.type, rhs_code.type())) {
+	}
+	
     }
     else if (is<uniq(FunctionCall)>(expr->data)) {
 

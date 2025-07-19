@@ -5,55 +5,10 @@
 #include <types.hpp>
 #include <errors.hpp>
 #include <format>
-#include <format>
+#include <symbols.hpp>
+
 using Kudo::Semantic::SemanticError;
 struct CResult;
-struct FunctionMeta;
-struct VariableMeta;
-
-struct VarMap {
-    shr(VarMap) parent;
-    std::unordered_map<std::string, shr(VariableMeta)> vars;
-
-    VarMap(shr(VarMap) parent) {
-	this->parent = parent;
-	vars = {};
-    }
-    
-    shr(VariableMeta) get_var(std::string k) {
-	if (vars.count(k) == 0) {
-	    if (parent) {
-		return parent->get_var(k);
-	    }	    
-	}	
-	return vars[k];
-    }
-    void add_var(std::string k, shr(VariableMeta) v) {
-	vars[k] = v;
-    }
-    bool has_var(std::string k) {
-	if (vars.count(k) == 0) {
-	    if (parent) {
-		return parent->has_var(k);
-	    }
-	    return false;
-	}
-	return true;
-    }
-};
-
-struct FunctionTable {
-    std::unordered_map<std::string, shr(FunctionMeta)> funcs;
-    shr(FunctionMeta) get_func(std::string k) {
-	return funcs[k];
-    }
-    void add_func(std::string k, shr(FunctionMeta) v) {
-	funcs[k] = v;
-    }
-    bool has_func(std::string k) {
-	return funcs.count(k) != 0;
-    }
-};
 
 namespace Kudo::CodeGen {
     struct CBackend {

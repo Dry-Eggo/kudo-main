@@ -97,6 +97,21 @@ namespace Kudo {
 	    CStringN(std::string v) : value(mv(v)) {}
 	};
 
+	struct BinaryOp {
+	    enum BinOp { Add, Sub, Mul, Div, Eq } op;
+	    ExprPtr    lhs;
+	    ExprPtr    rhs;
+
+	    BinaryOp(BinOp op, ExprPtr l, ExprPtr r): op(op), lhs(mv(l)), rhs(mv(r)) {}
+	};
+
+	struct UnaryOp {
+	    enum UnoOp { Add, Sub } op;
+	    ExprPtr    expr;
+
+	    UnaryOp(UnoOp op, ExprPtr e): op(op), expr(mv(e)) {}
+	};
+	
 	struct ExprStmt {
 	    ExprPtr expr;
 	    ExprStmt(ExprPtr e) : expr(std::move(e)) {}
